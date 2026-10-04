@@ -1,0 +1,86 @@
+<div class="lab-container">
+  <!-- Top Hero Header -->
+  <div class="lab-hero">
+    <div class="hero-left">
+      <span class="lab-pill">Curriculum Practical Syllabus • 30/30 Experiments</span>
+      <h1>Angular Framework Lab Experiments Explorer</h1>
+      <p>
+        Complete index and interactive demonstration of all 30 practical experiments from the syllabus PDF, 
+        fully wired and integrated into the Student Management System.
+      </p>
+    </div>
+    <div class="progress-box">
+      <div class="prog-circle">
+        <strong>100%</strong>
+        <span>Done</span>
+      </div>
+      <div class="prog-text">
+        <strong>30 of 30</strong>
+        <span>Experiments Implemented</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filter & Search Controls -->
+  <div class="filter-bar">
+    <div class="unit-tabs">
+      <button 
+        *ngFor="let u of units" 
+        (click)="selectedUnit = u" 
+        class="unit-btn" 
+        [class.active]="selectedUnit === u">
+        {{ u }}
+      </button>
+    </div>
+
+    <div class="search-box">
+      <input 
+        type="text" 
+        [(ngModel)]="searchTerm" 
+        placeholder="Search experiments by title or concept..." 
+        class="search-field" />
+    </div>
+  </div>
+
+  <!-- Experiments Cards Grid -->
+  <div class="experiments-grid">
+    <div *ngFor="let exp of filteredExperiments" class="exp-card">
+      <div class="exp-top-bar">
+        <span class="exp-number">Experiment #{{ exp.id }}</span>
+        <span class="exp-unit-badge">{{ exp.unit }}</span>
+        <span class="exp-type-badge">{{ exp.badge }}</span>
+      </div>
+
+      <h3 class="exp-title">{{ exp.title }}</h3>
+
+      <div class="exp-objective">
+        <strong>🎯 Syllabus Objective:</strong>
+        <p>{{ exp.objective }}</p>
+      </div>
+
+      <div class="exp-explanation">
+        <strong>💡 Kaise Kaam Karta Hai & Connection (Hindi):</strong>
+        <p>{{ exp.explanationHindi }}</p>
+      </div>
+
+      <!-- Expandable code snippet -->
+      <div *ngIf="expandedSnippetId === exp.id" class="code-snippet-box">
+        <div class="snippet-header">
+          <span>Core Code Implementation</span>
+          <button (click)="toggleSnippet(exp.id)" class="btn-hide">Hide</button>
+        </div>
+        <pre><code>{{ exp.codeSnippet }}</code></pre>
+      </div>
+
+      <div class="exp-actions-bar">
+        <button (click)="toggleSnippet(exp.id)" class="btn-toggle-code">
+          {{ expandedSnippetId === exp.id ? '▲ Hide Code' : '▼ View Code Snippet' }}
+        </button>
+
+        <a [routerLink]="exp.route" class="btn-go-feature">
+          Test in Project →
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

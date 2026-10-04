@@ -1,0 +1,62 @@
+<!-- 
+  [EXPERIMENT 7]: Reusable student card template 
+  Uses @Input() student data, AbbreviatePipe (Exp 12), and ngClass conditional styling (Exp 14)
+-->
+<div class="student-card-item">
+  <div class="card-header-bar">
+    <span class="course-pill">{{ student.course }}</span>
+    <span class="id-pill">ID: #{{ student.id }}</span>
+  </div>
+
+  <div class="avatar-row">
+    <div class="avatar-wrap">
+      <img [src]="student.photoUrl || 'https://api.dicebear.com/7.x/avataaars/svg?seed=' + student.name" 
+           [alt]="student.name" 
+           class="student-avatar-img" />
+    </div>
+
+    <div class="student-meta">
+      <h3 class="student-name">
+        {{ student.name }}
+      </h3>
+      <!-- [EXPERIMENT 12]: Custom Pipe 'abbreviate' used here: "Sonal K Patel" -> "S.K.P." -->
+      <span *ngIf="showAbbreviation" class="abbr-tag" title="Abbreviated Initials (Exp 12)">
+        Initials: <strong>{{ student.name | abbreviate }}</strong>
+      </span>
+      <p class="student-email">{{ student.email || 'No email registered' }}</p>
+    </div>
+  </div>
+
+  <div class="card-stats-box">
+    <div class="stat-cell">
+      <span class="stat-label">Marks</span>
+      <!-- [EXPERIMENT 14]: Conditional styling using ngClass. Green if >= 40, Red if < 40 -->
+      <span class="stat-value" [ngClass]="student.marks >= 40 ? 'marks-pass' : 'marks-fail'">
+        {{ student.marks }}%
+      </span>
+    </div>
+    <div class="stat-cell">
+      <span class="stat-label">Status</span>
+      <span class="status-badge" [ngClass]="student.marks >= 40 ? 'status-pass' : 'status-fail'">
+        {{ student.marks >= 40 ? '✓ PASS' : '✗ FAIL' }}
+      </span>
+    </div>
+    <div class="stat-cell">
+      <span class="stat-label">Grade</span>
+      <span class="grade-badge">{{ student.getGrade() }}</span>
+    </div>
+  </div>
+
+  <div *ngIf="showActions" class="card-actions">
+    <!-- [EXPERIMENT 19]: Dynamic route navigation to /student/:id -->
+    <a [routerLink]="['/student', student.id]" class="btn-action btn-view" title="View Full Profile">
+      <span>👁 Details</span>
+    </a>
+    <button (click)="onEditClick()" class="btn-action btn-edit" title="Edit Student">
+      <span>✏️ Edit</span>
+    </button>
+    <button (click)="onDeleteClick()" class="btn-action btn-delete" title="Delete Student">
+      <span>🗑️ Delete</span>
+    </button>
+  </div>
+</div>

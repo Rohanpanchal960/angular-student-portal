@@ -1,0 +1,113 @@
+<div class="store-page">
+  <!-- Toast alert on purchase -->
+  <div *ngIf="toastMessage" class="store-toast">
+    <span>{{ toastMessage }}</span>
+    <button (click)="toastMessage = null" class="btn-close-toast">×</button>
+  </div>
+
+  <!-- Header Banner -->
+  <div class="store-header">
+    <div class="badges-row">
+      <span class="badge-tag">Experiment 4 (Product Interface)</span>
+      <span class="badge-tag">Experiment 5 (Course Enums & Arrays)</span>
+      <span class="badge-tag">Experiment 9 (Event Binding (click))</span>
+      <span class="badge-tag">Experiment 11 (Currency & Date Pipes)</span>
+    </div>
+    <h1>Campus Store & Academic Supplies</h1>
+    <p>
+      Equip yourself with recommended syllabus textbooks, practical lab electronics, and study guides.
+    </p>
+  </div>
+
+  <!-- [EXPERIMENT 5]: Enum courses dropdown selection banner -->
+  <div class="course-selector-card">
+    <div class="selector-content">
+      <div class="selector-field">
+        <label for="courseDropdown">
+          <strong>Select Course Category (Exp 5 Enum):</strong>
+        </label>
+        <select id="courseDropdown" [(ngModel)]="selectedCourse" class="course-dropdown">
+          <!-- Populated from COURSE_LIST enum array -->
+          <option *ngFor="let c of courses" [value]="c">
+            {{ c }} Program
+          </option>
+        </select>
+      </div>
+
+      <div class="course-info-box">
+        <h4>{{ currentCourseDetails.name }} Program Overview</h4>
+        <p>{{ currentCourseDetails.description }}</p>
+        <div class="course-stats">
+          <span>⏳ Duration: <strong>{{ currentCourseDetails.durationYears }} Years</strong></span>
+          <span>📅 Semesters: <strong>{{ currentCourseDetails.semesterCount }} Semesters</strong></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filter & Store Controls -->
+  <div class="store-controls-row">
+    <div class="category-tabs">
+      <button 
+        *ngFor="let cat of categories" 
+        (click)="selectedCategory = cat" 
+        class="tab-btn" 
+        [class.active]="selectedCategory === cat">
+        {{ cat }}
+      </button>
+    </div>
+
+    <div class="cart-indicator">
+      <span>🛒 Items Purchased: <strong>{{ purchasedCount }}</strong></span>
+    </div>
+  </div>
+
+  <!-- [EXPERIMENT 4 & 9 & 11]: Products Grid -->
+  <div class="products-grid">
+    <div *ngFor="let prod of filteredProducts" class="product-card">
+      <div class="prod-badge-row">
+        <span class="category-badge">{{ prod.category }}</span>
+        <span class="stock-badge" [class.in-stock]="prod.inStock" [class.out-stock]="!prod.inStock">
+          {{ prod.inStock ? 'In Stock' : 'Out of Stock' }}
+        </span>
+      </div>
+
+      <div class="prod-img-box">
+        <img [src]="prod.imageUrl || 'https://via.placeholder.com/300x180'" [alt]="prod.name" class="prod-img" />
+      </div>
+
+      <div class="prod-body">
+        <h3 class="prod-title">{{ prod.name }}</h3>
+        <p class="prod-desc">{{ prod.description }}</p>
+
+        <!-- [EXPERIMENT 11]: Built-in pipes demonstration -->
+        <div class="pipe-demonstration-box">
+          <!-- Currency Pipe -->
+          <div class="price-row">
+            <span class="label">Price (Exp 11 Currency Pipe):</span>
+            <!-- Currency pipe formatted in INR -->
+            <strong class="formatted-price">{{ prod.price | currency:'INR':'symbol':'1.0-0' }}</strong>
+          </div>
+
+          <!-- Date Pipe -->
+          <div class="date-row">
+            <span class="label">Catalog Date (Exp 11 Date Pipe):</span>
+            <!-- Date pipe format dd/MM/yyyy as per syllabus: "₹ 1200, 01/05/2025" -->
+            <span class="formatted-date">{{ prod.releaseDate | date:'dd/MM/yyyy' }}</span>
+          </div>
+        </div>
+
+        <!-- [EXPERIMENT 9]: Event binding button click "Buy Now" -->
+        <div class="prod-footer">
+          <button 
+            (click)="onBuyProduct(prod)" 
+            [disabled]="!prod.inStock" 
+            class="btn-buy-now" 
+            title="Click to trigger Exp 9 event binding">
+            <span>{{ prod.inStock ? '🛍️ Buy Now' : '🚫 Out of Stock' }}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

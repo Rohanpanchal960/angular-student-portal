@@ -1,0 +1,299 @@
+<div class="student-list-container">
+  <!-- Toast alert notification -->
+  <div *ngIf="toastMessage" class="toast-alert" [ngClass]="'toast-' + toastType">
+    <span>{{ toastMessage }}</span>
+    <button (click)="toastMessage = null" class="btn-toast-close">×</button>
+  </div>
+
+  <!-- Header section -->
+  <div class="page-header-row">
+    <div>
+      <div class="badges-row">
+        <span class="badge-tag">Experiment 8 (*ngIf & *ngFor)</span>
+        <span class="badge-tag">Experiment 14 ([ngClass])</span>
+        <span class="badge-tag">Experiment 30 (Full CRUD)</span>
+      </div>
+      <h1 class="page-title">Student Management Directory</h1>
+      <p class="page-subtitle">
+        Manage students, filter records, evaluate marks, and perform full CRUD operations.
+      </p>
+    </div>
+
+    <div class="header-actions">
+      <button (click)="openAddModal()" class="btn-primary-action">
+        <span>➕ Add New Student</span>
+      </button>
+      <button (click)="resetAllData()" class="btn-ghost-action" title="Reset to initial syllabus dataset">
+        <span>🔄 Reset Data</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- [EXPERIMENT 8]: Toggle visibility control using checkbox -->
+  <div class="control-banner">
+    <div class="toggle-control-box">
+      <label class="toggle-label" for="showListCheckbox">
+        <input 
+          type="checkbox" 
+          id="showListCheckbox" 
+          [(ngModel)]="showList" 
+          class="checkbox-input" />
+        <span class="checkbox-text">
+          <strong>Show Student List:</strong> (Experiment 8: <code>*ngIf="showList"</code> toggle)
+        </span>
+      </label>
+      <span class="toggle-status" [ngClass]="showList ? 'status-visible' : 'status-hidden'">
+        {{ showList ? '👀 List Visible' : '🙈 List Hidden by *ngIf' }}
+      </span>
+    </div>
+
+    <!-- View mode switcher (Table vs Grid) -->
+    <div class="view-switch-box">
+      <button 
+        (click)="viewMode = 'table'" 
+        class="btn-switch" 
+        [class.active]="viewMode === 'table'">
+        📄 Table View (Exp 14 ngClass)
+      </button>
+      <button 
+        (click)="viewMode = 'grid'" 
+        class="btn-switch" 
+        [class.active]="viewMode === 'grid'">
+        📇 Card Grid (Exp 7 Reusable)
+      </button>
+    </div>
+  </div>
+
+  <!-- Filter & Search Bar -->
+  <div class="search-filter-bar">
+    <div class="search-input-wrap">
+      <span class="search-icon">🔍</span>
+      <input 
+        type="text" 
+        [(ngModel)]="searchTerm" 
+        placeholder="Search by student name, ID or email..." 
+        class="search-input" />
+      <button *ngIf="searchTerm" (click)="searchTerm = ''" class="clear-btn">×</button>
+    </div>
+
+    <div class="filter-controls">
+      <!-- Course filter -->
+      <select [(ngModel)]="selectedCourseFilter" class="filter-select">
+        <option value="ALL">All Courses (Exp 5)</option>
+        <option *ngFor="let c of courseList" [value]="c">{{ c }}</option>
+      </select>
+
+      <!-- Status filter -->
+      <select [(ngModel)]="selectedStatusFilter" class="filter-select">
+        <option value="ALL">All Statuses (Exp 14)</option>
+        <option value="PASS">Pass Only (Marks >= 40)</option>
+        <option value="FAIL">Fail Only (Marks < 40)</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- [EXPERIMENT 8]: *ngIf condition on showList boolean                       -->
+  <!-- ========================================================================= -->
+  <div *ngIf="showList; else hiddenListTemplate" class="list-display-section">
+    
+    <!-- Empty state -->
+    <div *ngIf="filteredStudents.length === 0" class="empty-state-box">
+      <div class="empty-icon">📂</div>
+      <h3>No students matched your search criteria</h3>
+      <p>Try adjusting your search query or course filters, or click "Add New Student".</p>
+      <button (click)="searchTerm = ''; selectedCourseFilter = 'ALL'; selectedStatusFilter = 'ALL'" class="btn-reset-filters">
+        Clear All Filters
+      </button>
+    </div>
+
+    <!-- TABLE VIEW: Showcasing Exp 14 [ngClass] styling on marks -->
+    <div *ngIf="viewMode === 'table' && filteredStudents.length > 0" class="table-card">
+      <div class="table-responsive">
+        <table class="students-data-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Student & Initials (Exp 12)</th>
+              <th>Course (Exp 5)</th>
+              <th>Marks & Performance (Exp 14)</th>
+              <th>Status</th>
+              <th>Grade</th>
+              <th>Actions (Exp 30 CRUD)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- [EXPERIMENT 8]: *ngFor looping over student list -->
+            <tr *ngFor="let s of filteredStudents; let i = index" class="table-row">
+              <td class="col-id">#{{ s.id }}</td>
+              <td class="col-student">
+                <div class="student-info-flex">
+                  <img [src]="s.photoUrl || 'https://api.dicebear.com/7.x/avataaars/svg?seed=' + s.name" 
+                       [alt]="s.name" 
+                       class="table-avatar" />
+                  <div>
+                    <strong class="student-table-name">{{ s.name }}</strong>
+                    <!-- [EXPERIMENT 12]: Abbreviate Pipe used -->
+                    <span class="table-abbr-tag" title="Custom Pipe Abbreviation (Exp 12)">
+                      Initials: {{ s.name | abbreviate }}
+                    </span>
+                    <span class="table-sub">{{ s.email }}</span>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <span class="table-course-pill">{{ s.course }}</span>
+              </td>
+              
+              <!-- [EXPERIMENT 14]: Use ngClass for conditional styling of student marks -->
+              <!-- Display green text if marks >= 40, red if below 40 -->
+              <td>
+                <div class="marks-display-cell">
+                  <span [ngClass]="{ 'marks-pass': s.marks >= 40, 'marks-fail': s.marks < 40 }">
+                    {{ s.marks }} / 100
+                  </span>
+                  <div class="mini-progress-bar">
+                    <div class="mini-progress-fill" 
+                         [style.width.%]="s.marks" 
+                         [ngClass]="s.marks >= 40 ? 'bg-pass' : 'bg-fail'">
+                    </div>
+                  </div>
+                </div>
+              </td>
+
+              <!-- [EXPERIMENT 14]: Status pill with ngClass -->
+              <td>
+                <span class="status-tag" [ngClass]="s.marks >= 40 ? 'tag-pass' : 'tag-fail'">
+                  {{ s.marks >= 40 ? '✓ PASS' : '⚠ FAIL' }}
+                </span>
+              </td>
+
+              <td>
+                <span class="grade-text">{{ s.getGrade() }}</span>
+              </td>
+
+              <!-- [EXPERIMENT 30]: CRUD action buttons (View, Edit, Delete) -->
+              <td class="col-actions">
+                <div class="action-buttons-group">
+                  <!-- [EXPERIMENT 19]: Route parameter navigation /student/:id -->
+                  <a [routerLink]="['/student', s.id]" class="btn-tbl-action btn-tbl-view" title="View Student Detail">
+                    👁 View
+                  </a>
+                  <button (click)="openEditModal(s)" class="btn-tbl-action btn-tbl-edit" title="Edit Student">
+                    ✏️ Edit
+                  </button>
+                  <button (click)="onDeleteStudent(s.id)" class="btn-tbl-action btn-tbl-del" title="Delete Student">
+                    🗑️ Delete
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="table-footer-bar">
+        <span>Showing <strong>{{ filteredStudents.length }}</strong> of {{ students.length }} students</span>
+      </div>
+    </div>
+
+    <!-- GRID VIEW: Reusable StudentCardComponent (Experiment 7) -->
+    <div *ngIf="viewMode === 'grid' && filteredStudents.length > 0" class="cards-grid-view">
+      <!-- [EXPERIMENT 7]: Reusing <app-student-card> with @Input() and event bindings -->
+      <app-student-card 
+        *ngFor="let s of filteredStudents" 
+        [student]="s"
+        (edit)="openEditModal($event)"
+        (delete)="onDeleteStudent($event)">
+      </app-student-card>
+    </div>
+
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- [EXPERIMENT 8]: ng-template shown when showList is false                  -->
+  <!-- ========================================================================= -->
+  <ng-template #hiddenListTemplate>
+    <div class="list-hidden-banner">
+      <div class="hidden-icon">🙈</div>
+      <h2>Student List is Currently Hidden!</h2>
+      <p class="hidden-text">
+        <strong>Experiment 8 Demonstration:</strong> The <code>*ngIf="showList"</code> structural directive 
+        completely detached the list from the DOM because the checkbox is unchecked.
+      </p>
+      <button (click)="showList = true" class="btn-reveal">
+        ✓ Check Box to Show Student List
+      </button>
+    </div>
+  </ng-template>
+
+  <!-- ========================================================================= -->
+  <!-- [EXPERIMENT 30]: CRUD Modal for Add / Edit Student                        -->
+  <!-- ========================================================================= -->
+  <div *ngIf="isModalOpen" class="modal-backdrop">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>{{ isEditMode ? '✏️ Edit Student Record (Exp 30 CRUD)' : '➕ Add New Student (Exp 30 CRUD)' }}</h3>
+        <button (click)="closeModal()" class="btn-close-modal">×</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Full Name *</label>
+          <input type="text" [(ngModel)]="formData.name" placeholder="e.g. Neha Sharma" class="form-control" />
+        </div>
+
+        <div class="form-row-2">
+          <div class="form-group">
+            <!-- [EXPERIMENT 5]: Enum courses in dropdown -->
+            <label>Course (Exp 5 Enum) *</label>
+            <select [(ngModel)]="formData.course" class="form-control">
+              <option *ngFor="let c of courseList" [value]="c">{{ c }}</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <!-- [EXPERIMENT 14]: Marks input for pass/fail calculation -->
+            <label>Marks (0 - 100) *</label>
+            <input type="number" [(ngModel)]="formData.marks" min="0" max="100" class="form-control" />
+            <small [ngClass]="formData.marks >= 40 ? 'marks-pass' : 'marks-fail'">
+              Status: {{ formData.marks >= 40 ? 'PASS (Green)' : 'FAIL (Red)' }}
+            </small>
+          </div>
+        </div>
+
+        <div class="form-row-2">
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" [(ngModel)]="formData.email" placeholder="student@example.com" class="form-control" />
+          </div>
+
+          <div class="form-group">
+            <label>Phone Number</label>
+            <input type="text" [(ngModel)]="formData.phone" placeholder="+91 98765 43210" class="form-control" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Gender</label>
+          <div class="gender-radio-group">
+            <label><input type="radio" [(ngModel)]="formData.gender" value="Male" /> Male</label>
+            <label><input type="radio" [(ngModel)]="formData.gender" value="Female" /> Female</label>
+            <label><input type="radio" [(ngModel)]="formData.gender" value="Other" /> Other</label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Residential Address</label>
+          <input type="text" [(ngModel)]="formData.address" placeholder="City, Address" class="form-control" />
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button (click)="closeModal()" class="btn-cancel">Cancel</button>
+        <button (click)="onSaveStudent()" class="btn-save">
+          {{ isEditMode ? 'Update Student Record' : 'Save & Register Student' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

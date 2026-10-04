@@ -1,0 +1,79 @@
+<div class="reports-page">
+  <div class="reports-header-banner">
+    <div class="badges-row">
+      <span class="badge-tag">Experiment 29 (Lazy-Loaded Module)</span>
+      <span class="badge-tag">Performance & Code-Splitting</span>
+    </div>
+    <div class="header-split">
+      <div>
+        <h1>Academic Reports & Performance Analytics</h1>
+        <p>
+          This entire module was dynamically downloaded via <code>loadChildren</code> lazy loading only when navigated to!
+        </p>
+      </div>
+      <button (click)="printReport()" class="btn-print">
+        🖨️ Print Official Report
+      </button>
+    </div>
+  </div>
+
+  <!-- Summary metric cards -->
+  <div class="report-kpis">
+    <div class="metric-card">
+      <span class="lbl">Total Evaluated</span>
+      <h3 class="num">{{ totalStudents }}</h3>
+    </div>
+    <div class="metric-card card-green">
+      <span class="lbl">Passed Students</span>
+      <h3 class="num">{{ totalPassed }}</h3>
+    </div>
+    <div class="metric-card card-red">
+      <span class="lbl">Under Review / Failed</span>
+      <h3 class="num">{{ totalFailed }}</h3>
+    </div>
+    <div class="metric-card card-gold">
+      <span class="lbl">Distinctions (>=75%)</span>
+      <h3 class="num">{{ distinctionCount }}</h3>
+    </div>
+  </div>
+
+  <!-- Course Wise Tabular Breakdown -->
+  <div class="course-reports-section">
+    <h2>Course-wise Academic Performance Matrix</h2>
+    
+    <div *ngFor="let course of courses" class="course-matrix-card">
+      <div class="matrix-header">
+        <h3>{{ course }} Program Report</h3>
+        <span class="student-count-pill">{{ getStudentsByCourse(course).length }} Students Registered</span>
+      </div>
+
+      <table class="report-table">
+        <thead>
+          <tr>
+            <th>Roll / ID</th>
+            <th>Student Name</th>
+            <th>Marks (%)</th>
+            <th>Grade</th>
+            <th>Result Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let s of getStudentsByCourse(course)">
+            <td>#{{ s.id }}</td>
+            <td><strong>{{ s.name }}</strong></td>
+            <td>{{ s.marks }}%</td>
+            <td>{{ s.marks >= 75 ? 'Distinction (A+)' : s.marks >= 60 ? 'First Class (A)' : s.marks >= 40 ? 'Pass Class (C)' : 'Fail (F)' }}</td>
+            <td>
+              <span class="result-badge" [class.pass]="s.marks >= 40" [class.fail]="s.marks < 40">
+                {{ s.marks >= 40 ? 'QUALIFIED' : 'FAILED' }}
+              </span>
+            </td>
+          </tr>
+          <tr *ngIf="getStudentsByCourse(course).length === 0">
+            <td colspan="5" class="empty-note">No student enrollments in this course yet.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

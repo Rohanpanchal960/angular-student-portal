@@ -1,0 +1,19 @@
+# Netlify Deployment Configuration for Angular Standalone SPA
+# Experiment 28: Deploy an Angular app on Netlify or GitHub Pages
+
+[build]
+  command = "npm run build"
+  publish = "dist/student-portal/browser"
+
+# SPA Fallback: Any route should serve index.html with HTTP status 200
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"

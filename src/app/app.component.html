@@ -1,0 +1,118 @@
+<div class="app-shell">
+  <!-- Top Navigation Header -->
+  <header class="app-navbar">
+    <div class="navbar-container">
+      <!-- Brand Logo -->
+      <a routerLink="/dashboard" (click)="closeMobileMenu()" class="navbar-brand">
+        <div class="brand-logo-icon">🎓</div>
+        <div class="brand-text">
+          <span class="brand-title">EduPortal</span>
+          <span class="brand-subtitle">Student Management System</span>
+        </div>
+      </a>
+
+      <!-- Navigation Links -->
+      <nav class="nav-links" [class.mobile-open]="isMobileMenuOpen">
+        <a routerLink="/dashboard" routerLinkActive="active" (click)="closeMobileMenu()" class="nav-link">
+          📊 Dashboard
+        </a>
+        <a routerLink="/students" routerLinkActive="active" (click)="closeMobileMenu()" class="nav-link">
+          👥 Students (CRUD)
+        </a>
+        <a routerLink="/admission" routerLinkActive="active" (click)="closeMobileMenu()" class="nav-link">
+          📝 Admissions
+        </a>
+        <a routerLink="/profile" routerLinkActive="active" (click)="closeMobileMenu()" class="nav-link">
+          👤 My Profile
+        </a>
+        <a routerLink="/store" routerLinkActive="active" (click)="closeMobileMenu()" class="nav-link">
+          🛍️ Campus Store
+        </a>
+        <a routerLink="/tasks" routerLinkActive="active" (click)="closeMobileMenu()" class="nav-link">
+          ⏰ Tasks
+        </a>
+        <a routerLink="/reports" routerLinkActive="active" (click)="closeMobileMenu()" class="nav-link">
+          📈 Reports (Lazy)
+        </a>
+        <a routerLink="/admin" routerLinkActive="active" (click)="closeMobileMenu()" class="nav-link nav-admin-link">
+          🔒 Admin Portal
+        </a>
+      </nav>
+
+      <!-- Right Header Actions -->
+      <div class="navbar-right">
+        <!-- [EXPERIMENT 26]: Shared State Counter Badge displayed live in header -->
+        <a routerLink="/counter" class="header-counter-pill" title="Exp 26: Live shared counter value">
+          <span class="counter-icon">⚡ State:</span>
+          <strong class="counter-num">{{ counterService.counter$ | async }}</strong>
+        </a>
+
+        <!-- Master 30 Experiments Navigator Button -->
+        <a routerLink="/experiments" routerLinkActive="active-lab" class="btn-lab-explorer" title="View all 30 Syllabus Experiments">
+          🧪 <span>Lab Experiments (1-30)</span>
+        </a>
+
+        <!-- Mobile Menu Toggle Button -->
+        <button (click)="toggleMobileMenu()" class="mobile-toggle-btn" aria-label="Toggle Navigation">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Area: Routed Views via <router-outlet> (Exp 18) -->
+  <main class="main-content-wrapper">
+    <router-outlet></router-outlet>
+  </main>
+
+  <!-- Comprehensive Footer -->
+  <footer class="app-footer">
+    <div class="footer-container">
+      <div class="footer-col">
+        <div class="footer-brand">
+          <span class="footer-logo">🎓</span>
+          <strong>EduPortal SMS</strong>
+        </div>
+        <p class="footer-text">
+          Complete practical implementation of the university Angular Framework Syllabus 
+          (Units 1 to 5, Experiments 1 to 30) configured with deployment scripts for Netlify & GitHub Pages.
+        </p>
+      </div>
+
+      <div class="footer-col">
+        <h4>Navigation Shortcuts</h4>
+        <ul class="footer-links">
+          <li><a routerLink="/home">Home (Exp 18)</a></li>
+          <li><a routerLink="/about">About Syllabus (Exp 18)</a></li>
+          <li><a routerLink="/contact">Contact Support (Exp 18)</a></li>
+          <li><a routerLink="/students">Students Directory (Exp 30 CRUD)</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Laboratory Practicals</h4>
+        <ul class="footer-links">
+          <li><a routerLink="/experiments">All 30 Experiments Explorer</a></li>
+          <li><a routerLink="/tasks">Overdue Directive (Exp 13)</a></li>
+          <li><a routerLink="/store">Pipes & Event Binding (Exp 9, 11)</a></li>
+          <li><a routerLink="/reports">Lazy-Loaded Reports (Exp 29)</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>System Deployment</h4>
+        <div class="deploy-status-box">
+          <span class="status-indicator"></span>
+          <span>Production Build Ready (Exp 28)</span>
+        </div>
+        <p class="build-caption">Build command: <code>npm run build</code></p>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© 2025-2026 Student Management System • University Angular Framework Syllabus Lab Work</p>
+    </div>
+  </footer>
+</div>

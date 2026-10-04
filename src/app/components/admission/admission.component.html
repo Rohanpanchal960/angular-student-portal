@@ -1,0 +1,275 @@
+<div class="admission-page">
+  <!-- Toast Alert -->
+  <div *ngIf="submissionSuccess" class="success-toast">
+    <span>{{ submissionSuccess }}</span>
+    <button (click)="submissionSuccess = null" class="btn-close-toast">×</button>
+  </div>
+
+  <!-- Header -->
+  <div class="admission-header">
+    <div class="badges-row">
+      <span class="badge-tag">Experiment 21 (Template-Driven Form)</span>
+      <span class="badge-tag">Experiment 24 (Reactive FormArray)</span>
+    </div>
+    <h1>Student Admission & Enrollment Portal</h1>
+    <p>
+      Compare Template-Driven vs. Reactive Dynamic forms for student onboarding and academic subjects entry.
+    </p>
+
+    <!-- Switcher -->
+    <div class="form-switch-tabs">
+      <button 
+        (click)="formType = 'template'" 
+        class="switch-tab-btn" 
+        [class.active]="formType === 'template'">
+        📝 Template-Driven Admission Form (Exp 21)
+      </button>
+      <button 
+        (click)="formType = 'dynamic'" 
+        class="switch-tab-btn" 
+        [class.active]="formType === 'dynamic'">
+        ⚡ Dynamic FormArray Subjects Entry (Exp 24)
+      </button>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- [EXPERIMENT 21]: Template-Driven Form with #admissionForm="ngForm"        -->
+  <!-- ========================================================================= -->
+  <div *ngIf="formType === 'template'" class="form-wrapper">
+    <div class="form-card">
+      <div class="form-card-header">
+        <h3>Template-Driven Student Admission Form (Experiment 21)</h3>
+        <span class="card-pill">#admissionForm="ngForm"</span>
+      </div>
+
+      <p class="form-intro">
+        Includes fields: <strong>name, email, gender, and course</strong> with <code>required</code> and <code>email</code> validations.
+      </p>
+
+      <form #admissionForm="ngForm" (ngSubmit)="onTemplateFormSubmit(admissionForm)" novalidate>
+        <!-- Field 1: Name (Required, minlength 3) -->
+        <div class="form-group">
+          <label for="templateName">Applicant Full Name *</label>
+          <input 
+            type="text" 
+            id="templateName" 
+            name="name" 
+            [(ngModel)]="templateModel.name" 
+            #nameCtrl="ngModel" 
+            required 
+            minlength="3" 
+            class="input-field" 
+            [class.is-invalid]="nameCtrl.invalid && (nameCtrl.dirty || nameCtrl.touched)"
+            placeholder="e.g. Sonal Patel" />
+          
+          <div *ngIf="nameCtrl.invalid && (nameCtrl.dirty || nameCtrl.touched)" class="validation-msg">
+            <span *ngIf="nameCtrl.errors?.['required']">Full name is required!</span>
+            <span *ngIf="nameCtrl.errors?.['minlength']">Name must have at least 3 characters.</span>
+          </div>
+        </div>
+
+        <!-- Field 2: Email (Required, valid email format) -->
+        <div class="form-group">
+          <label for="templateEmail">Email Address (Exp 21 Validation) *</label>
+          <input 
+            type="email" 
+            id="templateEmail" 
+            name="email" 
+            [(ngModel)]="templateModel.email" 
+            #emailCtrl="ngModel" 
+            required 
+            email 
+            class="input-field" 
+            [class.is-invalid]="emailCtrl.invalid && (emailCtrl.dirty || emailCtrl.touched)"
+            placeholder="applicant@university.edu" />
+
+          <div *ngIf="emailCtrl.invalid && (emailCtrl.dirty || emailCtrl.touched)" class="validation-msg">
+            <span *ngIf="emailCtrl.errors?.['required']">Email address is required!</span>
+            <span *ngIf="emailCtrl.errors?.['email']">Please enter a valid email format (e.g. name&#64;domain.com).</span>
+          </div>
+        </div>
+
+        <!-- Field 3: Gender Selection (Exp 21) -->
+        <div class="form-group">
+          <label>Gender (Exp 21) *</label>
+          <div class="radio-row">
+            <label class="radio-lbl">
+              <input type="radio" name="gender" [(ngModel)]="templateModel.gender" value="Male" required /> Male
+            </label>
+            <label class="radio-lbl">
+              <input type="radio" name="gender" [(ngModel)]="templateModel.gender" value="Female" required /> Female
+            </label>
+            <label class="radio-lbl">
+              <input type="radio" name="gender" [(ngModel)]="templateModel.gender" value="Other" required /> Other
+            </label>
+          </div>
+        </div>
+
+        <!-- Field 4: Course Selection (Exp 21) -->
+        <div class="form-group">
+          <label for="templateCourse">Select Course (Exp 21 & Exp 5 Enum) *</label>
+          <select 
+            id="templateCourse" 
+            name="course" 
+            [(ngModel)]="templateModel.course" 
+            #courseCtrl="ngModel" 
+            required 
+            class="select-field">
+            <option *ngFor="let c of courses" [value]="c">{{ c }} Program</option>
+          </select>
+        </div>
+
+        <!-- Phone & Address -->
+        <div class="form-row-2">
+          <div class="form-group">
+            <label for="templatePhone">Contact Phone Number</label>
+            <input 
+              type="text" 
+              id="templatePhone" 
+              name="phone" 
+              [(ngModel)]="templateModel.phone" 
+              class="input-field" 
+              placeholder="+91 98765 43210" />
+          </div>
+
+          <div class="form-group">
+            <label for="templateAddress">Permanent City / Address</label>
+            <input 
+              type="text" 
+              id="templateAddress" 
+              name="address" 
+              [(ngModel)]="templateModel.address" 
+              class="input-field" 
+              placeholder="Ahmedabad, Gujarat" />
+          </div>
+        </div>
+
+        <!-- Terms & Submit -->
+        <div class="form-group">
+          <label class="checkbox-lbl">
+            <input 
+              type="checkbox" 
+              name="agreeTerms" 
+              [(ngModel)]="templateModel.agreeTerms" 
+              required 
+              #termsCtrl="ngModel" />
+            I verify that all personal and academic details entered above are accurate.
+          </label>
+          <div *ngIf="termsCtrl.invalid && (termsCtrl.dirty || termsCtrl.touched)" class="validation-msg">
+            You must agree to the terms before submitting.
+          </div>
+        </div>
+
+        <div class="form-footer">
+          <button 
+            type="submit" 
+            [disabled]="admissionForm.invalid" 
+            class="btn-submit-primary">
+            ✓ Submit Admission Application (Exp 21)
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- [EXPERIMENT 24]: Dynamic Reactive Form with FormArray                     -->
+  <!-- ========================================================================= -->
+  <div *ngIf="formType === 'dynamic'" class="form-wrapper">
+    <div class="form-card">
+      <div class="form-card-header">
+        <h3>Dynamic Subjects & Marks Form (Experiment 24)</h3>
+        <span class="card-pill">FormArray in Reactive Forms</span>
+      </div>
+
+      <p class="form-intro">
+        Allow users to add multiple subjects with marks dynamically using Angular <code>FormArray</code>.
+      </p>
+
+      <form [formGroup]="dynamicSubjectsForm" (ngSubmit)="onDynamicFormSubmit()" novalidate>
+        <div class="form-row-2">
+          <div class="form-group">
+            <label>Student Full Name *</label>
+            <input 
+              type="text" 
+              formControlName="studentName" 
+              class="input-field" 
+              placeholder="e.g. Neha Sharma" />
+            <div *ngIf="dynamicSubjectsForm.get('studentName')?.invalid && dynamicSubjectsForm.get('studentName')?.touched" class="validation-msg">
+              Student name is required (min 3 chars).
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Enrolling Course *</label>
+            <select formControlName="course" class="select-field">
+              <option *ngFor="let c of courses" [value]="c">{{ c }}</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- FormArray Subjects Section -->
+        <div class="formarray-section">
+          <div class="formarray-header">
+            <h4>Academic Subjects & Marks (FormArray)</h4>
+            <button type="button" (click)="addSubject()" class="btn-add-row">
+              ➕ Add Subject (Exp 24)
+            </button>
+          </div>
+
+          <div formArrayName="subjects" class="subjects-list">
+            <div 
+              *ngFor="let sub of subjects.controls; let i = index" 
+              [formGroupName]="i" 
+              class="subject-row">
+              
+              <span class="row-index">#{{ i + 1 }}</span>
+
+              <div class="sub-input-wrap">
+                <input 
+                  type="text" 
+                  formControlName="name" 
+                  placeholder="Subject Name (e.g. Data Structures, Angular)" 
+                  class="input-field" />
+              </div>
+
+              <div class="marks-input-wrap">
+                <input 
+                  type="number" 
+                  formControlName="marks" 
+                  placeholder="Marks (0-100)" 
+                  min="0" 
+                  max="100" 
+                  class="input-field" />
+              </div>
+
+              <button 
+                type="button" 
+                (click)="removeSubject(i)" 
+                class="btn-remove-sub" 
+                title="Remove Subject">
+                🗑️
+              </button>
+            </div>
+          </div>
+
+          <!-- Live Average Marks Calculator -->
+          <div class="avg-summary-box">
+            <span>Dynamic Total Subjects: <strong>{{ subjects.length }}</strong></span>
+            <span>Calculated Aggregate Score: <strong>{{ calculatedAverage }}%</strong></span>
+          </div>
+        </div>
+
+        <div class="form-footer">
+          <button 
+            type="submit" 
+            [disabled]="dynamicSubjectsForm.invalid" 
+            class="btn-submit-primary">
+            ✓ Submit Dynamic Subjects Marksheet (Exp 24)
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,138 @@
+<div class="dashboard-page">
+  <!-- Hero Section -->
+  <header class="dashboard-hero">
+    <div class="hero-content">
+      <span class="badge-exp">Experiment 6 • Dashboard Overview</span>
+      <h1 class="hero-title">Academic & Student Analytics Dashboard</h1>
+      <p class="hero-sub">
+        Real-time statistical overview of student enrollments, academic performance, and course distributions.
+      </p>
+    </div>
+    <div class="hero-actions">
+      <a routerLink="/students" class="btn-primary">
+        <span>👥 Manage Students (CRUD)</span>
+      </a>
+      <a routerLink="/admission" class="btn-secondary">
+        <span>📝 New Admission</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- [EXPERIMENT 6]: Summary data KPI cards (Total Students & Total Courses) -->
+  <section class="kpi-grid">
+    <div class="kpi-card card-blue">
+      <div class="kpi-icon-wrap">🎓</div>
+      <div class="kpi-info">
+        <span class="kpi-label">Total Students (Exp 6)</span>
+        <h2 class="kpi-number">{{ totalStudents }}</h2>
+        <span class="kpi-caption">Active registered records</span>
+      </div>
+    </div>
+
+    <div class="kpi-card card-purple">
+      <div class="kpi-icon-wrap">📚</div>
+      <div class="kpi-info">
+        <span class="kpi-label">Total Courses (Exp 6)</span>
+        <h2 class="kpi-number">{{ totalCourses }}</h2>
+        <span class="kpi-caption">BCA, MCA, iMCA, BCA_Hons</span>
+      </div>
+    </div>
+
+    <div class="kpi-card card-green">
+      <div class="kpi-icon-wrap">📊</div>
+      <div class="kpi-info">
+        <span class="kpi-label">Average Score</span>
+        <h2 class="kpi-number">{{ averageMarks }}%</h2>
+        <span class="kpi-caption">Overall performance aggregate</span>
+      </div>
+    </div>
+
+    <div class="kpi-card card-amber">
+      <div class="kpi-icon-wrap">🏆</div>
+      <div class="kpi-info">
+        <span class="kpi-label">Passing Rate</span>
+        <h2 class="kpi-number">{{ passPercentage }}%</h2>
+        <span class="kpi-caption">{{ passedStudentsCount }} Passed / {{ failedStudentsCount }} Under Review</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Middle Grid: Course Breakdown & Quick Actions -->
+  <div class="analytics-row">
+    <!-- Course distribution -->
+    <div class="panel-box">
+      <div class="panel-header">
+        <h3>Course Enrollment Distribution</h3>
+        <span class="panel-tag">Enum Data (Exp 5)</span>
+      </div>
+      <div class="course-bars-list">
+        <div *ngFor="let item of courseBreakdown" class="course-bar-item">
+          <div class="bar-labels">
+            <span class="bar-name">{{ item.course }}</span>
+            <span class="bar-count">{{ item.count }} Students ({{ item.percentage }}%)</span>
+          </div>
+          <div class="bar-track">
+            <div class="bar-fill" [style.width.%]="item.percentage"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick shortcuts -->
+    <div class="panel-box quick-links-box">
+      <div class="panel-header">
+        <h3>Quick Portal Shortcuts</h3>
+        <span class="panel-tag">Direct Access</span>
+      </div>
+      <div class="shortcuts-grid">
+        <a routerLink="/students" class="shortcut-btn">
+          <span class="shortcut-icon">📋</span>
+          <div>
+            <strong>Student Directory</strong>
+            <p>Search, filter & full CRUD</p>
+          </div>
+        </a>
+        <a routerLink="/store" class="shortcut-btn">
+          <span class="shortcut-icon">🛍️</span>
+          <div>
+            <strong>Course Book Store</strong>
+            <p>Pipes & Event Binding</p>
+          </div>
+        </a>
+        <a routerLink="/tasks" class="shortcut-btn">
+          <span class="shortcut-icon">⏰</span>
+          <div>
+            <strong>Assignments & Tasks</strong>
+            <p>Custom Overdue Directive</p>
+          </div>
+        </a>
+        <a routerLink="/admission" class="shortcut-btn">
+          <span class="shortcut-icon">📝</span>
+          <div>
+            <strong>Admissions Form</strong>
+            <p>Template & Dynamic FormArray</p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reusable Student Card preview (Exp 7) -->
+  <section class="recent-students-section">
+    <div class="section-header-row">
+      <div>
+        <h2>Recently Enrolled Students</h2>
+        <p class="section-desc">Showcasing reusable <code>&lt;app-student-card&gt;</code> component (Experiment 7)</p>
+      </div>
+      <a routerLink="/students" class="link-more">View All Students →</a>
+    </div>
+
+    <div class="student-cards-grid">
+      <app-student-card 
+        *ngFor="let student of recentStudents" 
+        [student]="student"
+        [showActions]="true">
+      </app-student-card>
+    </div>
+  </section>
+</div>

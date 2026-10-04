@@ -1,0 +1,153 @@
+<div class="student-detail-page">
+  <!-- Back navigation bar -->
+  <div class="top-nav-bar">
+    <a routerLink="/students" class="btn-back">
+      ← Back to Student Directory
+    </a>
+    <span class="route-badge">
+      Route Parameter: <code>/student/{{ studentId }}</code> (Experiment 19)
+    </span>
+  </div>
+
+  <!-- Student Not Found State -->
+  <div *ngIf="notFound" class="not-found-card">
+    <div class="not-found-icon">🔍</div>
+    <h2>Student Record Not Found</h2>
+    <p>We could not find any active student with ID #{{ studentId }}.</p>
+    <a routerLink="/students" class="btn-primary">Return to Directory</a>
+  </div>
+
+  <!-- Student Detail Profile Content -->
+  <div *ngIf="student && !notFound" class="profile-layout">
+    <!-- Left Column: Identity Card -->
+    <div class="identity-card">
+      <div class="avatar-holder">
+        <img [src]="student.photoUrl || 'https://api.dicebear.com/7.x/avataaars/svg?seed=' + student.name" 
+             [alt]="student.name" 
+             class="avatar-large" />
+      </div>
+
+      <h1 class="profile-name">{{ student.name }}</h1>
+      <span class="abbr-badge" title="Exp 12 Custom Pipe Initials">
+        Initials: <strong>{{ student.name | abbreviate }}</strong>
+      </span>
+
+      <div class="course-tag-wrap">
+        <span class="course-badge">{{ student.course }}</span>
+        <span class="id-tag">Student ID: #{{ student.id }}</span>
+      </div>
+
+      <div class="status-summary-box">
+        <div class="summary-metric">
+          <span class="metric-label">Overall Marks</span>
+          <span class="metric-val" [ngClass]="student.marks >= 40 ? 'text-pass' : 'text-fail'">
+            {{ student.marks }}%
+          </span>
+        </div>
+        <div class="summary-metric">
+          <span class="metric-label">Status (Exp 14)</span>
+          <span class="status-pill" [ngClass]="student.marks >= 40 ? 'pill-pass' : 'pill-fail'">
+            {{ student.marks >= 40 ? '✓ PASSED' : '✗ FAILED' }}
+          </span>
+        </div>
+      </div>
+
+      <hr class="divider" />
+
+      <div class="contact-details-list">
+        <div class="contact-item">
+          <span class="c-icon">📧</span>
+          <div>
+            <label>Email Address</label>
+            <p>{{ student.email || 'Not provided' }}</p>
+          </div>
+        </div>
+        <div class="contact-item">
+          <span class="c-icon">📱</span>
+          <div>
+            <label>Phone Number</label>
+            <p>{{ student.phone || 'Not provided' }}</p>
+          </div>
+        </div>
+        <div class="contact-item">
+          <span class="c-icon">🏠</span>
+          <div>
+            <label>Address</label>
+            <p>{{ student.address || 'Campus Hostel' }}</p>
+          </div>
+        </div>
+        <div class="contact-item">
+          <span class="c-icon">📅</span>
+          <div>
+            <label>Enrollment Date</label>
+            <p>{{ (student.enrollmentDate | date:'mediumDate') || '2024-07-01' }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: Academic Marksheet & Subjects -->
+    <div class="academic-details">
+      <!-- Overview banner -->
+      <div class="academic-card">
+        <div class="academic-header">
+          <h2>Academic Transcript & Marksheet</h2>
+          <span class="card-badge">Official Record</span>
+        </div>
+
+        <p class="transcript-intro">
+          This transcript reflects semester marks verified by the Department of Computer Science.
+        </p>
+
+        <!-- Subjects table -->
+        <table class="marksheet-table">
+          <thead>
+            <tr>
+              <th>Subject / Lab Module</th>
+              <th>Max Marks</th>
+              <th>Marks Scored</th>
+              <th>Percentage</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let sub of student.subjects || []">
+              <td><strong>{{ sub.name }}</strong></td>
+              <td>{{ sub.maxMarks }}</td>
+              <td>{{ sub.marks }}</td>
+              <td>{{ (sub.marks / sub.maxMarks) * 100 | number:'1.0-0' }}%</td>
+              <td>
+                <span class="sub-status" [ngClass]="sub.marks >= (sub.maxMarks * 0.4) ? 'sub-pass' : 'sub-fail'">
+                  {{ sub.marks >= (sub.maxMarks * 0.4) ? 'PASS' : 'FAIL' }}
+                </span>
+              </td>
+            </tr>
+            <tr *ngIf="!student.subjects || student.subjects.length === 0">
+              <td colspan="5" class="empty-subjects">
+                No individual subjects recorded yet. Aggregate score: {{ student.marks }}%.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Syllabus Reference Note -->
+      <div class="concept-explainer-card">
+        <div class="explainer-header">
+          <span class="icon-bulb">💡</span>
+          <h3>How Route Parameters Work (Experiment 19)</h3>
+        </div>
+        <div class="explainer-content">
+          <p>
+            When a user clicks on any student link like <code>/student/{{ student.id }}</code>:
+          </p>
+          <ol>
+            <li>Angular Router matches the route definition: <code>&#123; path: 'student/:id', component: StudentDetailComponent &#125;</code></li>
+            <li>The component reads the parameter using <code>ActivatedRoute.paramMap.subscribe(params => params.get('id'))</code></li>
+            <li>It retrieves the corresponding student object from <code>StudentService.getStudentById(id)</code></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
