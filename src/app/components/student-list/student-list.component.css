@@ -668,3 +668,376 @@
   transform: translateY(-1px);
   box-shadow: 0 6px 18px rgba(79, 70, 229, 0.45);
 }
+
+/* =========================================================================
+   Marks Column & Inline Editor Styles
+   ========================================================================= */
+
+.th-marks-editor {
+  min-width: 175px;
+  background: #f1f5f9;
+}
+
+.col-marks-editor-cell {
+  vertical-align: middle;
+}
+
+.marks-cell-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+}
+
+.btn-cell-quick-edit {
+  background: #ecfdf5;
+  color: #059669;
+  border: 1px solid #a7f3d0;
+  padding: 0.35rem 0.65rem;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  transition: all 0.15s ease;
+}
+
+.btn-cell-quick-edit:hover {
+  background: #d1fae5;
+  color: #047857;
+  transform: translateY(-1px);
+}
+
+.btn-cell-marksheet {
+  background: #eef2ff;
+  color: #4f46e5;
+  border: 1px solid #c7d2fe;
+  padding: 0.35rem 0.65rem;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  transition: all 0.15s ease;
+}
+
+.btn-cell-marksheet:hover {
+  background: #e0e7ff;
+  color: #4338ca;
+}
+
+/* Active Inline Editor */
+.inline-editor-widget {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  background: #f8fafc;
+  padding: 0.45rem 0.55rem;
+  border-radius: 8px;
+  border: 1.5px solid #10b981;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
+  animation: fadeIn 0.15s ease;
+}
+
+.inline-stepper-row {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.btn-step-minus, .btn-step-plus {
+  background: #e2e8f0;
+  color: #334155;
+  border: none;
+  width: 26px;
+  height: 28px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-step-minus:hover, .btn-step-plus:hover {
+  background: #cbd5e1;
+}
+
+.input-inline-marks {
+  width: 55px;
+  height: 28px;
+  text-align: center;
+  border: 1px solid #94a3b8;
+  border-radius: 4px;
+  font-weight: 800;
+  font-size: 0.95rem;
+  color: #0f172a;
+}
+
+.input-inline-marks:focus {
+  outline: none;
+  border-color: #10b981;
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.25);
+}
+
+.inline-btn-group {
+  display: flex;
+  gap: 0.3rem;
+}
+
+.btn-save-inline {
+  flex: 1;
+  background: #10b981;
+  color: #ffffff;
+  border: none;
+  padding: 0.25rem 0.45rem;
+  border-radius: 4px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.2rem;
+}
+
+.btn-save-inline:hover {
+  background: #059669;
+}
+
+.btn-cancel-inline {
+  background: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #fca5a5;
+  padding: 0.25rem 0.45rem;
+  border-radius: 4px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn-tbl-marks {
+  background: #ecfdf5;
+  color: #059669;
+  border: 1px solid #a7f3d0;
+}
+
+.btn-tbl-marks:hover {
+  background: #d1fae5;
+  color: #047857;
+}
+
+/* Dedicated Marks & Subjects Modal */
+.modal-marks-card {
+  max-width: 600px;
+}
+
+.aggregate-marks-box {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.25rem;
+}
+
+.marks-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.85rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.marks-preview-badge {
+  font-size: 0.82rem;
+  font-weight: 800;
+  padding: 0.3rem 0.75rem;
+  border-radius: 9999px;
+}
+
+.badge-pass {
+  background: #dcfce7;
+  color: #15803d;
+  border: 1px solid #86efac;
+}
+
+.badge-fail {
+  background: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #fca5a5;
+}
+
+.marks-input-row {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin-bottom: 0.85rem;
+}
+
+.marks-slider {
+  flex: 1;
+  height: 8px;
+  accent-color: #10b981;
+  cursor: pointer;
+}
+
+.marks-number-input {
+  width: 80px;
+  padding: 0.5rem 0.75rem;
+  font-size: 1.1rem;
+  font-weight: 800;
+  text-align: center;
+  border: 2px solid #cbd5e1;
+  border-radius: 8px;
+}
+
+.marks-presets-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.presets-label {
+  font-size: 0.78rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.btn-preset {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+
+.preset-fail { background: #fee2e2; color: #b91c1c; border-color: #fca5a5; }
+.preset-pass { background: #dcfce7; color: #15803d; border-color: #86efac; }
+.preset-good { background: #e0e7ff; color: #4338ca; border-color: #c7d2fe; }
+.preset-dist { background: #fef3c7; color: #b45309; border-color: #fde68a; }
+
+.modal-divider {
+  margin: 1.25rem 0;
+  border: 0;
+  border-top: 1px solid #e2e8f0;
+}
+
+.subject-marks-section h4 {
+  margin: 0 0 0.85rem;
+  font-size: 0.95rem;
+  color: #334155;
+}
+
+.subjects-edit-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  margin-bottom: 1rem;
+}
+
+.subject-edit-row {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  background: #f8fafc;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.sub-name-input {
+  flex: 1;
+  padding: 0.4rem 0.65rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 0.88rem;
+}
+
+.sub-score-group {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.sub-marks-input, .sub-max-input {
+  width: 60px;
+  padding: 0.4rem;
+  text-align: center;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.slash-separator {
+  color: #64748b;
+  font-weight: 700;
+}
+
+.btn-del-sub {
+  background: none;
+  border: none;
+  color: #ef4444;
+  cursor: pointer;
+  padding: 0.35rem;
+  font-size: 0.9rem;
+}
+
+.btn-del-sub:hover {
+  color: #dc2626;
+}
+
+.add-sub-inputs {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.add-sub-name { flex: 2; min-width: 140px; padding: 0.45rem 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; }
+.add-sub-marks { width: 70px; padding: 0.45rem; border: 1px solid #cbd5e1; border-radius: 6px; text-align: center; }
+.add-sub-max { width: 70px; padding: 0.45rem; border: 1px solid #cbd5e1; border-radius: 6px; text-align: center; }
+
+.btn-add-sub {
+  background: #4f46e5;
+  color: #ffffff;
+  border: none;
+  padding: 0.45rem 0.85rem;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* Add Student Modal Marks Preset Chips */
+.marks-input-with-presets {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.quick-preset-chips {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.chip-preset {
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #475569;
+  cursor: pointer;
+}
+
+.chip-preset:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}

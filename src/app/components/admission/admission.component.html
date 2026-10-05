@@ -7,13 +7,9 @@
 
   <!-- Header -->
   <div class="admission-header">
-    <div class="badges-row">
-      <span class="badge-tag">Experiment 21 (Template-Driven Form)</span>
-      <span class="badge-tag">Experiment 24 (Reactive FormArray)</span>
-    </div>
     <h1>Student Admission & Enrollment Portal</h1>
     <p>
-      Compare Template-Driven vs. Reactive Dynamic forms for student onboarding and academic subjects entry.
+      Onboard new students or enter detailed subject evaluations with dynamic mark sheets.
     </p>
 
     <!-- Switcher -->
@@ -23,30 +19,27 @@
         class="switch-tab-btn" 
         [class.active]="formType === 'template'">
         <i class="fa-solid fa-file-pen me-2"></i>
-        Template-Driven Form (Exp 21)
+        Standard Admission Form
       </button>
       <button 
         (click)="formType = 'dynamic'" 
         class="switch-tab-btn" 
         [class.active]="formType === 'dynamic'">
         <i class="fa-solid fa-layer-group me-2"></i>
-        Dynamic FormArray Subjects (Exp 24)
+        Detailed Subjects Enrollment
       </button>
     </div>
   </div>
 
-  <!-- ========================================================================= -->
-  <!-- [EXPERIMENT 21]: Template-Driven Form with #admissionForm="ngForm"        -->
-  <!-- ========================================================================= -->
   <div *ngIf="formType === 'template'" class="form-wrapper">
     <div class="form-card">
       <div class="form-card-header">
-        <h3>Template-Driven Student Admission Form (Experiment 21)</h3>
-        <span class="card-pill">#admissionForm="ngForm"</span>
+        <h3>Student Admission Form</h3>
+        <span class="card-pill"><i class="fa-solid fa-user-plus me-1"></i> New Admission</span>
       </div>
 
       <p class="form-intro">
-        Includes fields: <strong>name, email, gender, and course</strong> with <code>required</code> and <code>email</code> validations.
+        Includes fields: <strong>name, email, gender, and course</strong> with instant input validation.
       </p>
 
       <form #admissionForm="ngForm" (ngSubmit)="onTemplateFormSubmit(admissionForm)" novalidate>
@@ -71,9 +64,9 @@
           </div>
         </div>
 
-        <!-- Field 2: Email (Required, valid email format) -->
+        <!-- Field 2: Email -->
         <div class="form-group">
-          <label for="templateEmail">Email Address (Exp 21 Validation) *</label>
+          <label for="templateEmail">Email Address *</label>
           <input 
             type="email" 
             id="templateEmail" 
@@ -92,9 +85,9 @@
           </div>
         </div>
 
-        <!-- Field 3: Gender Selection (Exp 21) -->
+        <!-- Field 3: Gender Selection -->
         <div class="form-group">
-          <label>Gender (Exp 21) *</label>
+          <label>Gender *</label>
           <div class="radio-row">
             <label class="radio-lbl">
               <input type="radio" name="gender" [(ngModel)]="templateModel.gender" value="Male" required /> Male
@@ -108,9 +101,9 @@
           </div>
         </div>
 
-        <!-- Field 4: Course Selection (Exp 21) -->
+        <!-- Field 4: Course Selection -->
         <div class="form-group">
-          <label for="templateCourse">Select Course (Exp 21 & Exp 5 Enum) *</label>
+          <label for="templateCourse">Select Course *</label>
           <select 
             id="templateCourse" 
             name="course" 
@@ -169,25 +162,23 @@
             [disabled]="admissionForm.invalid" 
             class="btn-submit-primary">
             <i class="fa-solid fa-paper-plane me-2"></i>
-            Submit Admission Application (Exp 21)
+            Submit Admission Application
           </button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- ========================================================================= -->
-  <!-- [EXPERIMENT 24]: Dynamic Reactive Form with FormArray                     -->
-  <!-- ========================================================================= -->
+  <!-- Dynamic Subjects & Marks Section -->
   <div *ngIf="formType === 'dynamic'" class="form-wrapper">
     <div class="form-card">
       <div class="form-card-header">
-        <h3>Dynamic Subjects & Marks Form (Experiment 24)</h3>
-        <span class="card-pill">FormArray in Reactive Forms</span>
+        <h3>Academic Subjects & Marks Enrollment</h3>
+        <span class="card-pill"><i class="fa-solid fa-list-check me-1"></i> Multi-Subject Entry</span>
       </div>
 
       <p class="form-intro">
-        Allow users to add multiple subjects with marks dynamically using Angular <code>FormArray</code>.
+        Add multiple subjects and enter respective marks for comprehensive academic evaluation.
       </p>
 
       <form [formGroup]="dynamicSubjectsForm" (ngSubmit)="onDynamicFormSubmit()" novalidate>
@@ -212,12 +203,12 @@
           </div>
         </div>
 
-        <!-- FormArray Subjects Section -->
+        <!-- Subjects Section -->
         <div class="formarray-section">
           <div class="formarray-header">
-            <h4>Academic Subjects & Marks (FormArray)</h4>
+            <h4>Academic Subjects & Marks Breakdown</h4>
             <button type="button" (click)="addSubject()" class="btn-add-row">
-              <i class="fa-solid fa-plus me-1"></i> Add Subject (Exp 24)
+              <i class="fa-solid fa-plus me-1"></i> Add Subject
             </button>
           </div>
 
@@ -233,7 +224,7 @@
                 <input 
                   type="text" 
                   formControlName="name" 
-                  placeholder="Subject Name (e.g. Data Structures, Angular)" 
+                  placeholder="Subject Name (e.g. Data Structures, Web Technology)" 
                   class="input-field" />
               </div>
 
@@ -259,7 +250,7 @@
 
           <!-- Live Average Marks Calculator -->
           <div class="avg-summary-box">
-            <span>Dynamic Total Subjects: <strong>{{ subjects.length }}</strong></span>
+            <span>Enrolled Subjects: <strong>{{ subjects.length }}</strong></span>
             <span>Calculated Aggregate Score: <strong>{{ calculatedAverage }}%</strong></span>
           </div>
         </div>
@@ -270,7 +261,7 @@
             [disabled]="dynamicSubjectsForm.invalid" 
             class="btn-submit-primary">
             <i class="fa-solid fa-check me-2"></i>
-            Submit Dynamic Subjects Marksheet (Exp 24)
+            Submit Academic Record
           </button>
         </div>
       </form>

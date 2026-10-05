@@ -19,8 +19,7 @@
       <h3 class="student-name">
         {{ student.name }}
       </h3>
-      <!-- [EXPERIMENT 12]: Custom Pipe 'abbreviate' used here: "Sonal K Patel" -> "S.K.P." -->
-      <span *ngIf="showAbbreviation" class="abbr-tag" title="Abbreviated Initials (Exp 12)">
+      <span *ngIf="showAbbreviation" class="abbr-tag" title="Abbreviated Initials">
         Initials: <strong>{{ student.name | abbreviate }}</strong>
       </span>
       <p class="student-email">{{ student.email || 'No email registered' }}</p>
@@ -54,6 +53,10 @@
       <i class="fa-solid fa-arrow-up-right-from-square"></i>
       <span>Details</span>
     </a>
+    <button (click)="onMarksClick()" class="btn-action btn-marks" title="Add / Edit Marks">
+      <i class="fa-solid fa-pen-nib"></i>
+      <span>Marks</span>
+    </button>
     <button (click)="onEditClick()" class="btn-action btn-edit" title="Edit Student">
       <i class="fa-solid fa-pen-to-square"></i>
       <span>Edit</span>

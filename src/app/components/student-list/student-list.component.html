@@ -1,6 +1,7 @@
 <div class="student-list-container">
   <!-- Toast alert notification -->
   <div *ngIf="toastMessage" class="toast-alert" [ngClass]="'toast-' + toastType">
+    <i class="fa-solid" [ngClass]="toastType === 'success' ? 'fa-circle-check' : toastType === 'danger' ? 'fa-triangle-exclamation' : 'fa-circle-info'"></i>
     <span>{{ toastMessage }}</span>
     <button (click)="toastMessage = null" class="btn-toast-close">×</button>
   </div>
@@ -8,14 +9,9 @@
   <!-- Header section -->
   <div class="page-header-row">
     <div>
-      <div class="badges-row">
-        <span class="badge-tag">Experiment 8 (*ngIf & *ngFor)</span>
-        <span class="badge-tag">Experiment 14 ([ngClass])</span>
-        <span class="badge-tag">Experiment 30 (Full CRUD)</span>
-      </div>
-      <h1 class="page-title">Student Management Directory</h1>
+      <h1 class="page-title">Student Management & Marks Directory</h1>
       <p class="page-subtitle">
-        Manage students, filter records, evaluate marks, and perform full CRUD operations.
+        Manage students, enter and edit marks directly in the table, evaluate performance, and view detailed transcripts.
       </p>
     </div>
 
@@ -24,14 +20,14 @@
         <i class="fa-solid fa-user-plus me-1"></i>
         <span>Add New Student</span>
       </button>
-      <button (click)="resetAllData()" class="btn-ghost-action" title="Reset to initial syllabus dataset">
+      <button (click)="resetAllData()" class="btn-ghost-action" title="Reset to initial student dataset">
         <i class="fa-solid fa-arrows-rotate me-1"></i>
         <span>Reset Data</span>
       </button>
     </div>
   </div>
 
-  <!-- [EXPERIMENT 8]: Toggle visibility control using checkbox -->
+  <!-- Toggle visibility control using checkbox -->
   <div class="control-banner">
     <div class="toggle-control-box">
       <label class="toggle-label" for="showListCheckbox">
@@ -41,12 +37,12 @@
           [(ngModel)]="showList" 
           class="checkbox-input" />
         <span class="checkbox-text">
-          <strong>Show Student List:</strong> (Experiment 8: <code>*ngIf="showList"</code> toggle)
+          <strong>Show Student Records</strong>
         </span>
       </label>
       <span class="toggle-status" [ngClass]="showList ? 'status-visible' : 'status-hidden'">
         <i class="fa-solid" [ngClass]="showList ? 'fa-eye' : 'fa-eye-slash'"></i>
-        {{ showList ? 'List Visible' : 'List Hidden by *ngIf' }}
+        {{ showList ? 'Records Visible' : 'Records Hidden' }}
       </span>
     </div>
 
@@ -56,13 +52,13 @@
         (click)="viewMode = 'table'" 
         class="btn-switch" 
         [class.active]="viewMode === 'table'">
-        <i class="fa-solid fa-table-list me-1"></i> Table View (Exp 14)
+        <i class="fa-solid fa-table-list me-1"></i> Table View (With Marks Column)
       </button>
       <button 
         (click)="viewMode = 'grid'" 
         class="btn-switch" 
         [class.active]="viewMode === 'grid'">
-        <i class="fa-solid fa-grip me-1"></i> Card Grid (Exp 7)
+        <i class="fa-solid fa-grip me-1"></i> Card Grid
       </button>
     </div>
   </div>
@@ -82,13 +78,13 @@
     <div class="filter-controls">
       <!-- Course filter -->
       <select [(ngModel)]="selectedCourseFilter" class="filter-select">
-        <option value="ALL">All Courses (Exp 5)</option>
+        <option value="ALL">All Courses</option>
         <option *ngFor="let c of courseList" [value]="c">{{ c }}</option>
       </select>
 
       <!-- Status filter -->
       <select [(ngModel)]="selectedStatusFilter" class="filter-select">
-        <option value="ALL">All Statuses (Exp 14)</option>
+        <option value="ALL">All Statuses</option>
         <option value="PASS">Pass Only (Marks >= 40)</option>
         <option value="FAIL">Fail Only (Marks < 40)</option>
       </select>
@@ -110,7 +106,7 @@
       </button>
     </div>
 
-    <!-- TABLE VIEW: Showcasing Exp 14 [ngClass] styling on marks -->
+    <!-- TABLE VIEW: Showcasing Exp 14 [ngClass] styling on marks and dedicated Marks Column -->
     <div *ngIf="viewMode === 'table' && filteredStudents.length > 0" class="table-card">
       <div class="table-responsive">
         <table class="students-data-table">
@@ -119,7 +115,8 @@
               <th>ID</th>
               <th>Student & Initials (Exp 12)</th>
               <th>Course (Exp 5)</th>
-              <th>Marks & Performance (Exp 14)</th>
+              <th>Current Marks</th>
+              <th class="th-marks-editor">Marks (Add / Edit Column)</th>
               <th>Status</th>
               <th>Grade</th>
               <th>Actions (Exp 30 CRUD)</th>
@@ -149,7 +146,6 @@
               </td>
               
               <!-- [EXPERIMENT 14]: Use ngClass for conditional styling of student marks -->
-              <!-- Display green text if marks >= 40, red if below 40 -->
               <td>
                 <div class="marks-display-cell">
                   <span [ngClass]="{ 'marks-pass': s.marks >= 40, 'marks-fail': s.marks < 40 }">
@@ -160,6 +156,50 @@
                          [style.width.%]="s.marks" 
                          [ngClass]="s.marks >= 40 ? 'bg-pass' : 'bg-fail'">
                     </div>
+                  </div>
+                </div>
+              </td>
+
+              <!-- DEDICATED MARKS ADD / EDIT COLUMN -->
+              <td class="col-marks-editor-cell">
+                <!-- Idle State: Buttons to edit inline or open modal -->
+                <div *ngIf="editingMarksStudentId !== s.id" class="marks-cell-actions">
+                  <button 
+                    (click)="startInlineMarksEdit(s, $event)" 
+                    class="btn-cell-quick-edit" 
+                    title="Quick edit marks for this row">
+                    <i class="fa-solid fa-pen-to-square me-1"></i> Edit Marks
+                  </button>
+                  <button 
+                    (click)="openMarksModal(s)" 
+                    class="btn-cell-marksheet" 
+                    title="Open full marksheet & subject breakdown">
+                    <i class="fa-solid fa-award"></i> Marksheet
+                  </button>
+                </div>
+
+                <!-- Active Inline Editing State -->
+                <div *ngIf="editingMarksStudentId === s.id" class="inline-editor-widget">
+                  <div class="inline-stepper-row">
+                    <button type="button" (click)="adjustInlineMarks(-5)" class="btn-step-minus" title="Decrease by 5">-5</button>
+                    <input 
+                      type="number" 
+                      [(ngModel)]="inlineMarksValue" 
+                      min="0" 
+                      max="100" 
+                      class="input-inline-marks" 
+                      (keyup.enter)="saveInlineMarks(s)" 
+                      (keyup.escape)="cancelInlineMarksEdit()" 
+                      autofocus />
+                    <button type="button" (click)="adjustInlineMarks(5)" class="btn-step-plus" title="Increase by 5">+5</button>
+                  </div>
+                  <div class="inline-btn-group">
+                    <button type="button" (click)="saveInlineMarks(s)" class="btn-save-inline" title="Save Marks">
+                      <i class="fa-solid fa-check"></i> Save
+                    </button>
+                    <button type="button" (click)="cancelInlineMarksEdit()" class="btn-cancel-inline" title="Cancel">
+                      <i class="fa-solid fa-xmark"></i>
+                    </button>
                   </div>
                 </div>
               </td>
@@ -183,6 +223,9 @@
                   <a [routerLink]="['/student', s.id]" class="btn-tbl-action btn-tbl-view" title="View Student Detail">
                     <i class="fa-solid fa-arrow-up-right-from-square"></i> View
                   </a>
+                  <button (click)="openMarksModal(s)" class="btn-tbl-action btn-tbl-marks" title="Update Marks">
+                    <i class="fa-solid fa-award"></i> Marks
+                  </button>
                   <button (click)="openEditModal(s)" class="btn-tbl-action btn-tbl-edit" title="Edit Student">
                     <i class="fa-solid fa-pen-to-square"></i> Edit
                   </button>
@@ -207,28 +250,130 @@
         *ngFor="let s of filteredStudents" 
         [student]="s"
         (edit)="openEditModal($event)"
+        (editMarks)="openMarksModal($event)"
         (delete)="onDeleteStudent($event)">
       </app-student-card>
     </div>
 
   </div>
 
-  <!-- ========================================================================= -->
-  <!-- [EXPERIMENT 8]: ng-template shown when showList is false                  -->
-  <!-- ========================================================================= -->
   <ng-template #hiddenListTemplate>
     <div class="list-hidden-banner">
       <div class="hidden-icon"><i class="fa-solid fa-eye-slash"></i></div>
-      <h2>Student List is Currently Hidden!</h2>
+      <h2>Student Records View is Toggled Off</h2>
       <p class="hidden-text">
-        <strong>Experiment 8 Demonstration:</strong> The <code>*ngIf="showList"</code> structural directive 
-        completely detached the list from the DOM because the checkbox is unchecked.
+        The student directory display is currently hidden. Click the button below to display all student records.
       </p>
       <button (click)="showList = true" class="btn-reveal">
-        <i class="fa-solid fa-check me-1"></i> Check Box to Show Student List
+        <i class="fa-solid fa-check me-1"></i> Show Student Records
       </button>
     </div>
   </ng-template>
+
+  <!-- ========================================================================= -->
+  <!-- DEDICATED MARKS & SUBJECTS MODAL                                          -->
+  <!-- ========================================================================= -->
+  <div *ngIf="isMarksModalOpen" class="modal-backdrop">
+    <div class="modal-card modal-marks-card">
+      <div class="modal-header">
+        <h3>
+          <i class="fa-solid fa-pen-to-square me-2"></i>
+          Update Marks: {{ selectedStudentForMarks?.name }} (ID #{{ selectedStudentForMarks?.id }})
+        </h3>
+        <button (click)="closeMarksModal()" class="btn-close-modal">×</button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Aggregate Marks Box -->
+        <div class="aggregate-marks-box">
+          <div class="marks-header-row">
+            <label class="form-label">
+              <strong>Overall Aggregate Marks (0 - 100) *</strong>
+            </label>
+            <span class="marks-preview-badge" [ngClass]="modalMarksValue >= 40 ? 'badge-pass' : 'badge-fail'">
+              {{ modalMarksValue }} / 100 • {{ modalMarksValue >= 40 ? 'PASS (Green)' : 'FAIL (Red)' }}
+            </span>
+          </div>
+
+          <div class="marks-input-row">
+            <input 
+              type="range" 
+              [(ngModel)]="modalMarksValue" 
+              min="0" 
+              max="100" 
+              class="marks-slider" />
+            <input 
+              type="number" 
+              [(ngModel)]="modalMarksValue" 
+              min="0" 
+              max="100" 
+              class="marks-number-input" />
+          </div>
+
+          <!-- Quick Presets -->
+          <div class="marks-presets-row">
+            <span class="presets-label">Quick Presets:</span>
+            <button type="button" (click)="setModalMarksPreset(35)" class="btn-preset preset-fail">35 (Fail)</button>
+            <button type="button" (click)="setModalMarksPreset(40)" class="btn-preset preset-pass">40 (Pass)</button>
+            <button type="button" (click)="setModalMarksPreset(65)" class="btn-preset preset-good">65 (First Class)</button>
+            <button type="button" (click)="setModalMarksPreset(88)" class="btn-preset preset-dist">88 (Distinction)</button>
+          </div>
+        </div>
+
+        <hr class="modal-divider" />
+
+        <!-- Subject Wise Marks Section -->
+        <div class="subject-marks-section">
+          <h4>Subject-Wise Breakdown</h4>
+
+          <div *ngIf="modalSubjectsList.length > 0" class="subjects-edit-list">
+            <div *ngFor="let sub of modalSubjectsList; let i = index" class="subject-edit-row">
+              <input type="text" [(ngModel)]="sub.name" placeholder="Subject Name" class="sub-name-input" />
+              <div class="sub-score-group">
+                <input type="number" [(ngModel)]="sub.marks" min="0" [max]="sub.maxMarks" class="sub-marks-input" />
+                <span class="slash-separator">/</span>
+                <input type="number" [(ngModel)]="sub.maxMarks" min="1" class="sub-max-input" />
+              </div>
+              <button (click)="removeModalSubject(i)" class="btn-del-sub" title="Remove subject">
+                <i class="fa-solid fa-trash-can"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Add new subject inline -->
+          <div class="add-sub-box">
+            <div class="add-sub-inputs">
+              <input 
+                type="text" 
+                [(ngModel)]="modalNewSubName" 
+                placeholder="New Subject / Lab Name..." 
+                class="form-input add-sub-name" />
+              <input 
+                type="number" 
+                [(ngModel)]="modalNewSubMarks" 
+                placeholder="Marks" 
+                class="form-input add-sub-marks" />
+              <input 
+                type="number" 
+                [(ngModel)]="modalNewSubMax" 
+                placeholder="Max" 
+                class="form-input add-sub-max" />
+              <button type="button" (click)="addModalSubject()" class="btn-add-sub">
+                <i class="fa-solid fa-plus me-1"></i> Add Subject
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button (click)="closeMarksModal()" class="btn-cancel">Cancel</button>
+        <button (click)="saveMarksModal()" class="btn-save">
+          <i class="fa-solid fa-floppy-disk me-1"></i> Save Marks
+        </button>
+      </div>
+    </div>
+  </div>
 
   <!-- ========================================================================= -->
   <!-- [EXPERIMENT 30]: CRUD Modal for Add / Edit Student                        -->
@@ -261,7 +406,15 @@
           <div class="form-group">
             <!-- [EXPERIMENT 14]: Marks input for pass/fail calculation -->
             <label>Marks (0 - 100) *</label>
-            <input type="number" [(ngModel)]="formData.marks" min="0" max="100" class="form-control" />
+            <div class="marks-input-with-presets">
+              <input type="number" [(ngModel)]="formData.marks" min="0" max="100" class="form-control" />
+              <div class="quick-preset-chips">
+                <button type="button" (click)="formData.marks = 35" class="chip-preset">35</button>
+                <button type="button" (click)="formData.marks = 40" class="chip-preset">40</button>
+                <button type="button" (click)="formData.marks = 75" class="chip-preset">75</button>
+                <button type="button" (click)="formData.marks = 90" class="chip-preset">90</button>
+              </div>
+            </div>
             <small [ngClass]="formData.marks >= 40 ? 'marks-pass' : 'marks-fail'">
               Status: {{ formData.marks >= 40 ? 'PASS (Green)' : 'FAIL (Red)' }}
             </small>

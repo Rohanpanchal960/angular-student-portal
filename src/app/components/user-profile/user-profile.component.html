@@ -1,28 +1,23 @@
 <div class="user-profile-page">
   <!-- Top Title Banner -->
   <div class="profile-header-banner">
-    <div class="badges-row">
-      <span class="badge-tag">Experiment 2 (Interpolation)</span>
-      <span class="badge-tag">Experiment 10 (Two-Way Binding [(ngModel)])</span>
-      <span class="badge-tag">Experiment 25 (Template-Driven File Upload)</span>
-    </div>
     <h1>Student Self-Service Profile & Identity Center</h1>
     <p>
-      Demonstrating Angular property interpolation, dynamic two-way data synchronization, and client-side photo uploading.
+      Manage and update your personal information, profile photo, and academic identity card.
     </p>
   </div>
 
   <div class="profile-content-grid">
-    <!-- LEFT PANEL: Two-Way Data Binding Form [(ngModel)] (Exp 10) & File Upload (Exp 25) -->
+    <!-- LEFT PANEL: Two-Way Data Binding Form & File Upload -->
     <div class="form-panel">
-      <!-- Section 1: Two-Way Binding Edit Inputs -->
+      <!-- Section 1: Personal Details Inputs -->
       <div class="panel-card">
         <div class="card-title-row">
-          <h3><i class="fa-solid fa-user-pen me-2"></i> Edit Personal Details (Experiment 10)</h3>
-          <span class="pill-info">[(ngModel)] Live Sync</span>
+          <h3><i class="fa-solid fa-user-pen me-2"></i> Edit Personal Details</h3>
+          <span class="pill-info"><i class="fa-solid fa-arrows-rotate me-1"></i> Live Auto-Sync</span>
         </div>
         <p class="section-hint">
-          Type in the input boxes below; notice how the profile badge on the right updates instantly in real time!
+          Update your details below; the official student ID card on the right will update in real time.
         </p>
 
         <form class="two-way-form">
@@ -102,14 +97,14 @@
         </form>
       </div>
 
-      <!-- Section 2: [EXPERIMENT 25] Template-Driven File Upload Form with Instant Preview -->
+      <!-- Section 2: Profile Picture Upload Form with Instant Preview -->
       <div class="panel-card upload-card">
         <div class="card-title-row">
-          <h3><i class="fa-solid fa-cloud-arrow-up me-2"></i> Profile Picture Upload (Experiment 25)</h3>
-          <span class="pill-info">Template-Driven + FileReader</span>
+          <h3><i class="fa-solid fa-cloud-arrow-up me-2"></i> Profile Picture Upload</h3>
+          <span class="pill-info"><i class="fa-solid fa-image me-1"></i> Client Preview</span>
         </div>
         <p class="section-hint">
-          Upload a profile picture and inspect the instant client-side preview before submitting the form.
+          Upload a profile picture and inspect the instant client-side preview before saving.
         </p>
 
         <!-- Success Toast -->
@@ -122,7 +117,7 @@
           <i class="fa-solid fa-triangle-exclamation me-1"></i> {{ uploadErrorMessage }}
         </div>
 
-        <!-- Template-driven form with #fileUploadForm="ngForm" -->
+        <!-- Form for profile picture upload -->
         <form #fileUploadForm="ngForm" (ngSubmit)="onUploadSubmit()" class="upload-form">
           <div class="drop-zone" [class.has-preview]="previewPhotoUrl">
             <input 
@@ -141,7 +136,7 @@
 
           <!-- Real-Time Photo Preview Box -->
           <div *ngIf="previewPhotoUrl" class="preview-box">
-            <h4>Live Image Preview (Experiment 25 Requirement)</h4>
+            <h4>Selected Image Preview</h4>
             <div class="preview-content">
               <img [src]="previewPhotoUrl" alt="Selected Preview" class="preview-img" />
               <div class="preview-meta">
@@ -162,7 +157,7 @@
       </div>
     </div>
 
-    <!-- RIGHT PANEL: [EXPERIMENT 2] Static Profile Display using Interpolation -->
+    <!-- RIGHT PANEL: Official ID Card Preview -->
     <div class="preview-panel">
       <div class="id-card-render">
         <div class="id-card-top">
@@ -172,12 +167,10 @@
 
         <div class="id-photo-row">
           <div class="photo-frame">
-            <!-- [EXPERIMENT 2 & 25]: Profile photo interpolation -->
             <img [src]="user.photoUrl" alt="{{ user.name }}" class="student-photo" />
           </div>
 
           <div class="id-core-info">
-            <!-- [EXPERIMENT 2]: Interpolation of user.name -->
             <h2 class="id-user-name">{{ user.name }}</h2>
             <p class="id-roll">{{ user.rollNo }}</p>
             <span class="id-sem-pill">Semester {{ user.semester }}</span>
@@ -185,27 +178,23 @@
         </div>
 
         <div class="id-attributes-grid">
-          <!-- [EXPERIMENT 2]: Interpolation of user.email -->
           <div class="id-attr">
-            <span class="attr-label">Email Address (Exp 2):</span>
+            <span class="attr-label">Email Address:</span>
             <span class="attr-value">{{ user.email }}</span>
           </div>
 
-          <!-- [EXPERIMENT 2]: Interpolation of user.age -->
           <div class="id-attr">
-            <span class="attr-label">Age (Exp 2):</span>
+            <span class="attr-label">Age:</span>
             <span class="attr-value">{{ user.age }} Years</span>
           </div>
 
-          <!-- [EXPERIMENT 10]: Two-way bound phone -->
           <div class="id-attr">
-            <span class="attr-label">Phone (Exp 10):</span>
+            <span class="attr-label">Contact Phone:</span>
             <span class="attr-value">{{ user.phone }}</span>
           </div>
 
-          <!-- [EXPERIMENT 10]: Two-way bound address -->
           <div class="id-attr full-width">
-            <span class="attr-label">Residential Address (Exp 10):</span>
+            <span class="attr-label">Residential Address:</span>
             <span class="attr-value">{{ user.address }}</span>
           </div>
 
@@ -221,15 +210,14 @@
         </div>
       </div>
 
-      <!-- Explanatory educational card -->
+      <!-- Informational ID card -->
       <div class="explainer-card">
-        <h4><i class="fa-solid fa-lightbulb me-2"></i> Connection Note: Experiment 2, 10 & 25</h4>
+        <h4><i class="fa-solid fa-circle-info me-2"></i> Student Identity Details</h4>
         <ul>
-          <li><strong>Interpolation:</strong> Syntax <code>&#123;&#123; user.name &#125;&#125;</code> evaluates the TypeScript property and inserts the string directly into the DOM.</li>
-          <li><strong>Two-way Binding:</strong> <code>[(ngModel)]</code> combines property binding <code>[ ]</code> with event binding <code>( )</code> for bidirectional state synchronization.</li>
-          <li><strong>Template File Upload:</strong> JavaScript's <code>FileReader.readAsDataURL()</code> converts local file buffers to base64 images without needing an immediate backend roundtrip.</li>
+          <li><strong>Real-Time Sync:</strong> Changes saved to your profile are automatically updated across your student identity records.</li>
+          <li><strong>ID Verification:</strong> The barcode and roll number represent your unique university enrollment identification.</li>
+          <li><strong>Photo Updates:</strong> Upload a clear passport-style photo for official university records and marksheets.</li>
         </ul>
-      </div>
     </div>
   </div>
 </div>

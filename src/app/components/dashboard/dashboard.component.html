@@ -3,7 +3,7 @@
   <header class="dashboard-hero">
     <div class="hero-content">
       <span class="badge-exp">
-        <i class="fa-solid fa-circle-nodes me-1"></i> Experiment 6 • Dashboard Overview
+        <i class="fa-solid fa-circle-nodes me-1"></i> Student ERP Overview
       </span>
       <h1 class="hero-title">Academic & Student Analytics Dashboard</h1>
       <p class="hero-sub">
@@ -11,29 +11,29 @@
       </p>
     </div>
     <div class="hero-actions">
-      <a routerLink="/syllabus" class="btn-primary">
-        <i class="fa-solid fa-book-bookmark me-2"></i>
-        <span>Syllabus & Curriculum Hub</span>
-      </a>
-      <a routerLink="/students" class="btn-secondary">
+      <a routerLink="/students" class="btn-primary">
         <i class="fa-solid fa-users-gear me-2"></i>
-        <span>Manage Students (CRUD)</span>
+        <span>Manage Students & Marks</span>
       </a>
-      <a routerLink="/notices" class="btn-secondary">
-        <i class="fa-solid fa-bullhorn me-2"></i>
-        <span>Live Notices (API)</span>
+      <a routerLink="/reports" class="btn-secondary">
+        <i class="fa-solid fa-chart-line me-2"></i>
+        <span>Academic Reports</span>
+      </a>
+      <a routerLink="/admission" class="btn-secondary">
+        <i class="fa-solid fa-file-signature me-2"></i>
+        <span>Admissions Form</span>
       </a>
     </div>
   </header>
 
-  <!-- [EXPERIMENT 6]: Summary data KPI cards (Total Students & Total Courses) -->
+  <!-- Summary data KPI cards (Total Students & Total Courses) -->
   <section class="kpi-grid">
     <div class="kpi-card card-blue">
       <div class="kpi-icon-wrap">
         <i class="fa-solid fa-user-graduate"></i>
       </div>
       <div class="kpi-info">
-        <span class="kpi-label">Total Students (Exp 6)</span>
+        <span class="kpi-label">Total Students</span>
         <h2 class="kpi-number">{{ totalStudents }}</h2>
         <span class="kpi-caption">Active registered records</span>
       </div>
@@ -44,9 +44,9 @@
         <i class="fa-solid fa-book-open"></i>
       </div>
       <div class="kpi-info">
-        <span class="kpi-label">Total Courses (Exp 6)</span>
+        <span class="kpi-label">Academic Programs</span>
         <h2 class="kpi-number">{{ totalCourses }}</h2>
-        <span class="kpi-caption">BCA, MCA, iMCA, BCA_Hons</span>
+        <span class="kpi-caption">BCA, MCA, iMCA, BCA Hons</span>
       </div>
     </div>
 
@@ -79,7 +79,7 @@
     <div class="panel-box">
       <div class="panel-header">
         <h3>Course Enrollment Distribution</h3>
-        <span class="panel-tag">Enum Data (Exp 5)</span>
+        <span class="panel-tag">Academic Departments</span>
       </div>
       <div class="course-bars-list">
         <div *ngFor="let item of courseBreakdown" class="course-bar-item">
@@ -108,37 +108,37 @@
             <p>Search, filter & full CRUD</p>
           </div>
         </a>
-        <a routerLink="/store" class="shortcut-btn">
-          <span class="shortcut-icon"><i class="fa-solid fa-store"></i></span>
+        <a routerLink="/reports" class="shortcut-btn">
+          <span class="shortcut-icon"><i class="fa-solid fa-chart-line"></i></span>
           <div>
-            <strong>Course Book Store</strong>
-            <p>Pipes & Event Binding</p>
+            <strong>Academic Reports</strong>
+            <p>Analytics, Marksheets & Export</p>
           </div>
         </a>
         <a routerLink="/tasks" class="shortcut-btn">
           <span class="shortcut-icon"><i class="fa-solid fa-clock-rotate-left"></i></span>
           <div>
             <strong>Assignments & Tasks</strong>
-            <p>Custom Overdue Directive</p>
+            <p>Deadlines & Status</p>
           </div>
         </a>
         <a routerLink="/admission" class="shortcut-btn">
           <span class="shortcut-icon"><i class="fa-solid fa-file-signature"></i></span>
           <div>
             <strong>Admissions Form</strong>
-            <p>Template & Dynamic FormArray</p>
+            <p>New Student Applications</p>
           </div>
         </a>
       </div>
     </div>
   </div>
 
-  <!-- Reusable Student Card preview (Exp 7) -->
+  <!-- Reusable Student Card preview -->
   <section class="recent-students-section">
     <div class="section-header-row">
       <div>
         <h2>Recently Enrolled Students</h2>
-        <p class="section-desc">Showcasing reusable <code>&lt;app-student-card&gt;</code> component (Experiment 7)</p>
+        <p class="section-desc">Overview of latest student enrollments and performance cards</p>
       </div>
       <a routerLink="/students" class="link-more">
         View All Students <i class="fa-solid fa-arrow-right ms-1"></i>

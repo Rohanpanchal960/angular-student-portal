@@ -1,0 +1,235 @@
+<div class="login-page-container">
+  <!-- Decorative background elements -->
+  <div class="bg-shape shape-1"></div>
+  <div class="bg-shape shape-2"></div>
+
+  <div class="login-wrapper">
+    <!-- Header Brand Banner -->
+    <div class="login-header">
+      <div class="login-brand-icon">
+        <i class="fa-solid fa-graduation-cap"></i>
+      </div>
+      <h1 class="portal-heading">EduPortal Portal Login</h1>
+      <p class="portal-subheading">
+        Student ERP & Academic Management System • Fully Working Demo
+      </p>
+    </div>
+
+    <!-- Active User Session Inspector Card (If already logged in) -->
+    <div *ngIf="currentUser" class="active-session-card">
+      <div class="session-header">
+        <span class="pulse-indicator"></span>
+        <strong>Active Session Detected</strong>
+      </div>
+      <div class="session-body">
+        <img [src]="currentUser.avatarUrl || 'https://api.dicebear.com/7.x/avataaars/svg?seed=' + currentUser.name" 
+             [alt]="currentUser.name" 
+             class="session-avatar" />
+        <div class="session-info">
+          <h3 class="session-name">{{ currentUser.name }}</h3>
+          <p class="session-email">{{ currentUser.email }}</p>
+          <div class="session-badges">
+            <span class="role-pill" [ngClass]="'role-' + currentUser.role">
+              <i class="fa-solid" [ngClass]="currentUser.role === 'admin' ? 'fa-user-shield' : currentUser.role === 'faculty' ? 'fa-chalkboard-user' : 'fa-user-graduate'"></i>
+              {{ currentUser.role | uppercase }}
+            </span>
+            <span class="dept-pill">{{ currentUser.department }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="session-actions">
+        <a routerLink="/dashboard" class="btn-session-dash">
+          <i class="fa-solid fa-chart-pie me-1"></i> Go to Dashboard
+        </a>
+        <a routerLink="/students" class="btn-session-students">
+          <i class="fa-solid fa-users me-1"></i> Manage Students & Marks
+        </a>
+        <button (click)="onLogout()" class="btn-session-logout">
+          <i class="fa-solid fa-right-from-bracket me-1"></i> Sign Out
+        </button>
+      </div>
+    </div>
+
+    <!-- 1-Click Demo Accounts Quick Access -->
+    <div class="demo-accounts-section">
+      <div class="demo-section-title">
+        <i class="fa-solid fa-bolt text-warning me-2"></i>
+        <span>Select a Demo Role (1-Click Fill & Login)</span>
+      </div>
+
+      <div class="demo-cards-grid">
+        <div 
+          *ngFor="let acc of demoAccounts" 
+          class="demo-card" 
+          [class.active-demo]="email === acc.email"
+          (click)="fillDemoAccount(acc)">
+          <div class="demo-card-top">
+            <span class="demo-role-badge" [ngClass]="acc.badgeClass">
+              <i class="fa-solid" [ngClass]="acc.icon"></i>
+              {{ acc.role | uppercase }}
+            </span>
+            <button 
+              type="button" 
+              (click)="quickLogin(acc); $event.stopPropagation()" 
+              class="btn-instant-login" 
+              title="Instant 1-Click Sign In">
+              Fast In <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </div>
+          <strong class="demo-name">{{ acc.name }}</strong>
+          <p class="demo-desc">{{ acc.description }}</p>
+          <div class="demo-cred-snippet">
+            <code>{{ acc.email }}</code>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Login Card -->
+    <div class="login-card">
+      <div class="card-inner-header">
+        <h2>Sign In to Your Account</h2>
+        <p>Enter your credentials or choose a quick demo role above.</p>
+      </div>
+
+      <!-- Success Alert Banner -->
+      <div *ngIf="successMessage" class="alert-box alert-success">
+        <i class="fa-solid fa-circle-check alert-icon"></i>
+        <div class="alert-content">
+          <strong>Authentication Successful!</strong>
+          <p>{{ successMessage }}</p>
+        </div>
+      </div>
+
+      <!-- Error Alert Banner -->
+      <div *ngIf="errorMessage" class="alert-box alert-danger">
+        <i class="fa-solid fa-circle-exclamation alert-icon"></i>
+        <div class="alert-content">
+          <strong>Authentication Failed</strong>
+          <p>{{ errorMessage }}</p>
+        </div>
+        <button (click)="errorMessage = null" class="btn-alert-close">×</button>
+      </div>
+
+      <!-- Login Form -->
+      <form (ngSubmit)="onSubmit()" class="login-form">
+        <!-- Email field -->
+        <div class="form-group">
+          <label for="loginEmail" class="form-label">
+            <span>Email Address or Username</span>
+            <span class="required-star">*</span>
+          </label>
+          <div class="input-with-icon">
+            <i class="fa-solid fa-envelope field-icon"></i>
+            <input 
+              type="text" 
+              id="loginEmail" 
+              name="email" 
+              [(ngModel)]="email" 
+              placeholder="e.g. admin@eduportal.ac.in" 
+              class="form-input" 
+              required 
+              autocomplete="username" />
+          </div>
+        </div>
+
+        <!-- Password field -->
+        <div class="form-group">
+          <div class="label-row">
+            <label for="loginPassword" class="form-label">
+              <span>Password</span>
+              <span class="required-star">*</span>
+            </label>
+            <a href="javascript:void(0)" (click)="openForgotPassword()" class="forgot-link">
+              Forgot password?
+            </a>
+          </div>
+          <div class="input-with-icon">
+            <i class="fa-solid fa-lock field-icon"></i>
+            <input 
+              [type]="showPassword ? 'text' : 'password'" 
+              id="loginPassword" 
+              name="password" 
+              [(ngModel)]="password" 
+              placeholder="Enter your password" 
+              class="form-input password-input" 
+              required 
+              autocomplete="current-password" />
+            <button 
+              type="button" 
+              (click)="togglePasswordVisibility()" 
+              class="btn-toggle-eye" 
+              [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'"
+              title="Show / Hide password">
+              <i class="fa-solid" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Remember Me Checkbox -->
+        <div class="form-options-row">
+          <label class="remember-checkbox-label">
+            <input type="checkbox" [(ngModel)]="rememberMe" name="rememberMe" class="custom-checkbox" />
+            <span>Remember this device</span>
+          </label>
+          <span class="ssl-note">
+            <i class="fa-solid fa-shield-check text-success"></i> 256-Bit Encrypted
+          </span>
+        </div>
+
+        <!-- Submit Button -->
+        <button 
+          type="submit" 
+          [disabled]="isLoading" 
+          class="btn-submit-login">
+          <span *ngIf="!isLoading">
+            <i class="fa-solid fa-right-to-bracket me-2"></i> Sign In to Portal
+          </span>
+          <span *ngIf="isLoading" class="loading-state">
+            <i class="fa-solid fa-spinner fa-spin me-2"></i> Verifying Credentials...
+          </span>
+        </button>
+      </form>
+
+      <!-- Demo Info Footer -->
+      <div class="login-card-footer">
+        <p class="demo-hint-text">
+          <i class="fa-solid fa-circle-info text-primary me-1"></i>
+          <strong>Demo Notice:</strong> You can sign in using any of the 3 demo roles above or enter any email with a password of at least 4 characters.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Forgot Password Simulation Modal -->
+  <div *ngIf="showForgotModal" class="forgot-modal-backdrop">
+    <div class="forgot-modal-box">
+      <div class="forgot-header">
+        <div class="forgot-icon"><i class="fa-solid fa-key"></i></div>
+        <h3>Reset Demo Account Password</h3>
+        <button (click)="closeForgotPassword()" class="btn-close-modal">×</button>
+      </div>
+      <div class="forgot-body">
+        <p>Enter the email address associated with your portal profile to receive reset instructions.</p>
+
+        <div *ngIf="forgotSuccess" class="alert-box alert-success mb-3">
+          <i class="fa-solid fa-circle-check"></i>
+          <span>{{ forgotSuccess }}</span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Registered Email</label>
+          <input 
+            type="email" 
+            [(ngModel)]="forgotEmail" 
+            placeholder="admin@eduportal.ac.in" 
+            class="form-input" />
+        </div>
+      </div>
+      <div class="forgot-footer">
+        <button (click)="closeForgotPassword()" class="btn-cancel">Close</button>
+        <button (click)="sendPasswordReset()" class="btn-send-reset">Send Reset Link</button>
+      </div>
+    </div>
+  </div>
+</div>

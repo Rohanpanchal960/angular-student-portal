@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { StudentService } from '../../services/student.service';
-import { Student } from '../../models/student.model';
+import { Student, DynamicSubject } from '../../models/student.model';
 import { Course, COURSE_LIST } from '../../models/course.enum';
 import { StudentCardComponent } from '../student-card/student-card.component';
 import { AbbreviatePipe } from '../../pipes/abbreviate.pipe';
@@ -14,22 +14,8 @@ import { AbbreviatePipe } from '../../pipes/abbreviate.pipe';
  * [EXPERIMENT 14] - Use ngClass for conditional styling of student marks (>=40 green, <40 red)
  * [EXPERIMENT 15] - Consume StudentService getAllStudents()
  * [EXPERIMENT 30] - Mini Project with full CRUD operations for Student Management System
+ * Enhanced with Interactive Marks Column & Inline / Modal Marks Editor
  * ====================================================================================
- * 
- * [KYA KARTA HAI YE CODE?]:
- * Ye Student Management System ka main directory screen hai jisme:
- * 1. `showList: boolean = true`: Checkbox toggle se *ngIf list ko hide/show karta hai (Exp 8 requirement).
- * 2. `*ngFor="let student of filteredStudents"`: Sabhi students ko iterate karta hai (Exp 8 requirement).
- * 3. `[ngClass]="{ 'marks-pass': s.marks >= 40, 'marks-fail': s.marks < 40 }"`: Pass/Fail marks
- *    ko green aur red text/badge me conditionally style karta hai (Exp 14 requirement).
- * 4. Full CRUD operations:
- *    - CREATE: Naya student add karna with validation
- *    - READ: Search, Course filter, Status filter, Table view aur Card grid view toggle
- *    - UPDATE: Existing student ke marks, name, phone, course edit karna
- *    - DELETE: Student record remove karna with confirmation
- * 
- * [STUDENT MANAGEMENT SYSTEM ME CONNECTION]:
- * Teachers aur admin students ko manage karne ke liye isi page ka sabse zyada use karte hain.
  */
 
 @Component({
@@ -53,7 +39,7 @@ export class StudentListComponent implements OnInit {
 
   courseList = COURSE_LIST;
 
-  // CRUD Modal State
+  // Full Profile CRUD Modal State
   isModalOpen: boolean = false;
   isEditMode: boolean = false;
   currentEditingId: number | null = null;
@@ -68,6 +54,21 @@ export class StudentListComponent implements OnInit {
     gender: 'Male' as 'Male' | 'Female' | 'Other',
     address: ''
   };
+
+  // =========================================================================
+  // Dedicated Interactive Marks Column & Inline Editor State
+  // =========================================================================
+  editingMarksStudentId: number | null = null;
+  inlineMarksValue: number = 0;
+
+  // Dedicated Marks & Subject Breakdown Modal State
+  isMarksModalOpen: boolean = false;
+  selectedStudentForMarks: Student | null = null;
+  modalMarksValue: number = 75;
+  modalSubjectsList: DynamicSubject[] = [];
+  modalNewSubName: string = '';
+  modalNewSubMarks: number = 80;
+  modalNewSubMax: number = 100;
 
   // Toast message
   toastMessage: string | null = null;
@@ -102,7 +103,101 @@ export class StudentListComponent implements OnInit {
     });
   }
 
-  // CRUD Modal open for Add
+  // =========================================================================
+  // Inline Marks Editing Methods (Directly in table column)
+  // =========================================================================
+  startInlineMarksEdit(student: Student, event?: Event): void {
+    if (event) {
+      event.stopPropagation();
+    }
+    this.editingMarksStudentId = student.id;
+    this.inlineMarksValue = student.marks;
+  }
+
+  adjustInlineMarks(delta: number): void {
+    const nextVal = Math.max(0, Math.min(100, Number(this.inlineMarksValue) + delta));
+    this.inlineMarksValue = nextVal;
+  }
+
+  saveInlineMarks(student: Student): void {
+    if (this.inlineMarksValue < 0 || this.inlineMarksValue > 100) {
+      alert('Marks must be between 0 and 100!');
+      return;
+    }
+
+    const updatedMarks = Math.round(Number(this.inlineMarksValue));
+    this.studentService.updateMarks(student.id, updatedMarks);
+    this.editingMarksStudentId = null;
+
+    const statusText = updatedMarks >= 40 ? 'PASS' : 'FAIL';
+    this.showToast(`Marks updated for ${student.name}: ${updatedMarks}/100 (${statusText})`, 'success');
+  }
+
+  cancelInlineMarksEdit(): void {
+    this.editingMarksStudentId = null;
+  }
+
+  // =========================================================================
+  // Dedicated Marks & Subject Breakdown Modal Methods
+  // =========================================================================
+  openMarksModal(student: Student): void {
+    this.selectedStudentForMarks = student;
+    this.modalMarksValue = student.marks;
+    this.modalSubjectsList = student.subjects ? student.subjects.map(s => ({ ...s })) : [];
+    this.modalNewSubName = '';
+    this.modalNewSubMarks = 80;
+    this.modalNewSubMax = 100;
+    this.isMarksModalOpen = true;
+  }
+
+  closeMarksModal(): void {
+    this.isMarksModalOpen = false;
+    this.selectedStudentForMarks = null;
+  }
+
+  setModalMarksPreset(score: number): void {
+    this.modalMarksValue = score;
+  }
+
+  addModalSubject(): void {
+    if (!this.modalNewSubName.trim()) {
+      alert('Subject name is required!');
+      return;
+    }
+
+    this.modalSubjectsList.push({
+      name: this.modalNewSubName.trim(),
+      marks: Math.max(0, Math.min(this.modalNewSubMax, Number(this.modalNewSubMarks))),
+      maxMarks: Number(this.modalNewSubMax) || 100
+    });
+
+    this.modalNewSubName = '';
+    this.modalNewSubMarks = 80;
+  }
+
+  removeModalSubject(index: number): void {
+    this.modalSubjectsList.splice(index, 1);
+  }
+
+  saveMarksModal(): void {
+    if (!this.selectedStudentForMarks) return;
+
+    if (this.modalMarksValue < 0 || this.modalMarksValue > 100) {
+      alert('Marks must be between 0 and 100!');
+      return;
+    }
+
+    const finalMarks = Math.round(Number(this.modalMarksValue));
+    this.studentService.updateMarks(this.selectedStudentForMarks.id, finalMarks, this.modalSubjectsList);
+
+    const studentName = this.selectedStudentForMarks.name;
+    this.closeMarksModal();
+    this.showToast(`Updated marksheet for ${studentName} to ${finalMarks}/100 successfully!`, 'success');
+  }
+
+  // =========================================================================
+  // Full Student Record CRUD Modal Methods
+  // =========================================================================
   openAddModal(): void {
     this.isEditMode = false;
     this.currentEditingId = null;
@@ -118,7 +213,6 @@ export class StudentListComponent implements OnInit {
     this.isModalOpen = true;
   }
 
-  // CRUD Modal open for Edit
   openEditModal(student: Student): void {
     this.isEditMode = true;
     this.currentEditingId = student.id;
@@ -138,7 +232,6 @@ export class StudentListComponent implements OnInit {
     this.isModalOpen = false;
   }
 
-  // Save student (Add or Edit)
   onSaveStudent(): void {
     if (!this.formData.name.trim()) {
       alert('Student name is required!');
@@ -151,7 +244,6 @@ export class StudentListComponent implements OnInit {
     }
 
     if (this.isEditMode && this.currentEditingId !== null) {
-      // UPDATE [Exp 30]
       this.studentService.updateStudent(this.currentEditingId, {
         name: this.formData.name.trim(),
         course: this.formData.course,
@@ -163,7 +255,6 @@ export class StudentListComponent implements OnInit {
       });
       this.showToast(`Student #${this.currentEditingId} updated successfully!`, 'success');
     } else {
-      // CREATE [Exp 30]
       const created = this.studentService.addStudent({
         name: this.formData.name.trim(),
         course: this.formData.course,
@@ -173,8 +264,8 @@ export class StudentListComponent implements OnInit {
         gender: this.formData.gender,
         address: this.formData.address,
         subjects: [
-          { name: 'Core Computing', marks: Number(this.formData.marks), maxMarks: 100 },
-          { name: 'Practical Lab', marks: Math.min(100, Number(this.formData.marks) + 5), maxMarks: 100 }
+          { name: 'Core Theory', marks: Number(this.formData.marks), maxMarks: 100 },
+          { name: 'Practical Lab Work', marks: Math.min(100, Number(this.formData.marks) + 5), maxMarks: 100 }
         ]
       });
       this.showToast(`Student ${created.name} added successfully with ID #${created.id}!`, 'success');
@@ -183,7 +274,6 @@ export class StudentListComponent implements OnInit {
     this.closeModal();
   }
 
-  // DELETE [Exp 30]
   onDeleteStudent(id: number): void {
     const student = this.studentService.getStudentById(id);
     const confirmed = confirm(`Are you sure you want to delete student "${student?.name}" (ID #${id})?`);

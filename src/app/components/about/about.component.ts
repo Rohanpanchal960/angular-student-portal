@@ -15,11 +15,11 @@ import { RouterModule } from '@angular/router';
   template: `
     <div class="about-page">
       <div class="about-hero">
-        <span class="badge-tag">Experiment 18 • About Us</span>
+        <span class="badge-tag">About Portal</span>
         <h1>About the Student Management System & Syllabus</h1>
         <p>
           Designed according to the official Angular Framework syllabus curriculum,
-          covering all 5 fundamental units and 30 practical experiments.
+          covering all fundamental units and practical academic modules.
         </p>
       </div>
 
@@ -40,7 +40,7 @@ import { RouterModule } from '@angular/router';
             <i class="fa-solid fa-cubes unit-icon"></i>
           </div>
           <h3>Components, Data Binding & Directives</h3>
-          <p>Interpolation, Property & Event Binding, [(ngModel)], Built-in & Custom Pipes and Directives.</p>
+          <p>Interpolation, Property & Event Binding, Two-Way Data Binding, Built-in & Custom Pipes and Directives.</p>
           <span class="coverage-tag"><i class="fa-solid fa-chart-pie"></i> Weightage: 20%</span>
         </div>
 

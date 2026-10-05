@@ -40,6 +40,7 @@ export class StudentCardComponent {
 
   @Output() delete = new EventEmitter<number>();
   @Output() edit = new EventEmitter<Student>();
+  @Output() editMarks = new EventEmitter<Student>();
 
   onDeleteClick(): void {
     if (confirm(`Are you sure you want to delete student: ${this.student.name} (ID: ${this.student.id})?`)) {
@@ -49,5 +50,9 @@ export class StudentCardComponent {
 
   onEditClick(): void {
     this.edit.emit(this.student);
+  }
+
+  onMarksClick(): void {
+    this.editMarks.emit(this.student);
   }
 }

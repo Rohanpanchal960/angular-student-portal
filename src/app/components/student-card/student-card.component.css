@@ -193,6 +193,15 @@
   background: #dbeafe;
 }
 
+.btn-marks {
+  background: #ecfdf5;
+  color: #059669;
+}
+
+.btn-marks:hover {
+  background: #d1fae5;
+}
+
 .btn-edit {
   background: #fef3c7;
   color: #b45309;

@@ -112,7 +112,7 @@ export class CounterControllerComponent {
       <p>Subscribes to <code>counter$</code> stream via <code>async</code> pipe.</p>
       
       <div class="count-display-box">
-        <span class="count-label">Shared State (Exp 26):</span>
+        <span class="count-label">Shared State Counter:</span>
         <div class="live-counter-number">{{ counterService.counter$ | async }}</div>
         <span class="sync-status">
           <i class="fa-solid fa-circle-check me-1 text-success"></i> Live Synchronized across Portal
@@ -120,7 +120,7 @@ export class CounterControllerComponent {
       </div>
 
       <div class="signals-preview-box">
-        <div class="signal-tag">Angular 18 Signal State (Unit 4):</div>
+        <div class="signal-tag">Reactive Signal State:</div>
         <div class="signal-metrics">
           <span>Signal Value: <strong>{{ counterService.signalCount() }}</strong></span>
           <span>Computed (x2): <strong>{{ counterService.doubleCount() }}</strong></span>
@@ -196,14 +196,10 @@ export class CounterDisplayComponent {
   template: `
     <div class="counter-demo-page">
       <div class="demo-header">
-        <div class="badges-row">
-          <span class="badge-tag">Experiment 26 (Shared State Management)</span>
-          <span class="badge-tag">Unit 4: RxJS vs Angular Signals</span>
-        </div>
         <h1>Shared State Between Independent Components</h1>
         <p>
-          Syllabus Experiment 26 & Unit 4: One component increments a counter and the other displays 
-          the updated count in real-time using an Angular Service with RxJS BehaviorSubject & Angular 18 Signals.
+          One component updates the counter state and the other displays 
+          the updated count in real-time across the portal using an Angular Service with RxJS and Angular Signals.
         </p>
       </div>
 
@@ -212,16 +208,16 @@ export class CounterDisplayComponent {
         <app-counter-display></app-counter-display>
       </div>
 
-      <!-- State Management Comparison Table (Unit 4 Syllabus) -->
+      <!-- State Management Comparison Table -->
       <div class="state-comparison-card">
-        <h3><i class="fa-solid fa-code-compare me-2"></i> Unit 4 State Management: RxJS BehaviorSubject vs Angular Signals</h3>
+        <h3><i class="fa-solid fa-code-compare me-2"></i> State Management: RxJS BehaviorSubject vs Angular Signals</h3>
         <div class="table-responsive">
           <table class="comparison-table">
             <thead>
               <tr>
                 <th>Feature / Dimension</th>
-                <th>RxJS BehaviorSubject (Exp 26)</th>
-                <th>Angular 18 Signals (Unit 4)</th>
+                <th>RxJS BehaviorSubject</th>
+                <th>Angular Signals</th>
               </tr>
             </thead>
             <tbody>

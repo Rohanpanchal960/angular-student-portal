@@ -41,4 +41,9 @@ export class AppComponent {
   closeMobileMenu(): void {
     this.isMobileMenuOpen = false;
   }
+
+  logout(): void {
+    this.authService.logout();
+    this.closeMobileMenu();
+  }
 }

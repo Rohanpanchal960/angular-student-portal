@@ -1,11 +1,18 @@
 <div class="student-detail-page">
+  <!-- Toast notification -->
+  <div *ngIf="toastMessage" class="toast-alert toast-success">
+    <i class="fa-solid fa-circle-check me-2"></i>
+    <span>{{ toastMessage }}</span>
+    <button (click)="toastMessage = null" class="btn-toast-close">×</button>
+  </div>
+
   <!-- Back navigation bar -->
   <div class="top-nav-bar">
     <a routerLink="/students" class="btn-back">
       <i class="fa-solid fa-arrow-left me-1"></i> Back to Student Directory
     </a>
     <span class="route-badge">
-      Route Parameter: <code>/student/{{ studentId }}</code> (Experiment 19)
+      Student ID: #{{ studentId }}
     </span>
   </div>
 
@@ -28,7 +35,7 @@
       </div>
 
       <h1 class="profile-name">{{ student.name }}</h1>
-      <span class="abbr-badge" title="Exp 12 Custom Pipe Initials">
+      <span class="abbr-badge" title="Abbreviated Initials">
         Initials: <strong>{{ student.name | abbreviate }}</strong>
       </span>
 
@@ -45,13 +52,18 @@
           </span>
         </div>
         <div class="summary-metric">
-          <span class="metric-label">Status (Exp 14)</span>
+          <span class="metric-label">Academic Status</span>
           <span class="status-pill" [ngClass]="student.marks >= 40 ? 'pill-pass' : 'pill-fail'">
             <i class="fa-solid" [ngClass]="student.marks >= 40 ? 'fa-check' : 'fa-xmark'"></i>
             {{ student.marks >= 40 ? 'PASSED' : 'FAILED' }}
           </span>
         </div>
       </div>
+
+      <!-- Quick Action Button to Edit Marks -->
+      <button (click)="openMarksModal()" class="btn-edit-marks-sidebar">
+        <i class="fa-solid fa-pen-to-square me-2"></i> Update Marks & Marksheet
+      </button>
 
       <hr class="divider" />
 
@@ -92,13 +104,16 @@
       <!-- Overview banner -->
       <div class="academic-card">
         <div class="academic-header">
-          <h2>Academic Transcript & Marksheet</h2>
-          <span class="card-badge">Official Record</span>
+          <div>
+            <h2>Academic Transcript & Marksheet</h2>
+            <p class="transcript-intro">
+              Semester marks verified by the Department of Computer Science.
+            </p>
+          </div>
+          <button (click)="openMarksModal()" class="btn-primary-action">
+            <i class="fa-solid fa-plus-minus me-1"></i> Add / Edit Marks
+          </button>
         </div>
-
-        <p class="transcript-intro">
-          This transcript reflects semester marks verified by the Department of Computer Science.
-        </p>
 
         <!-- Subjects table wrapped in responsive scroll container -->
         <div class="table-responsive marksheet-table-wrap">
@@ -116,7 +131,11 @@
               <tr *ngFor="let sub of student.subjects || []">
                 <td><strong>{{ sub.name }}</strong></td>
                 <td>{{ sub.maxMarks }}</td>
-                <td>{{ sub.marks }}</td>
+                <td>
+                  <strong [ngClass]="sub.marks >= (sub.maxMarks * 0.4) ? 'text-pass' : 'text-fail'">
+                    {{ sub.marks }}
+                  </strong>
+                </td>
                 <td>{{ (sub.marks / sub.maxMarks) * 100 | number:'1.0-0' }}%</td>
                 <td>
                   <span class="sub-status" [ngClass]="sub.marks >= (sub.maxMarks * 0.4) ? 'sub-pass' : 'sub-fail'">
@@ -126,30 +145,115 @@
               </tr>
               <tr *ngIf="!student.subjects || student.subjects.length === 0">
                 <td colspan="5" class="empty-subjects">
-                  No individual subjects recorded yet. Aggregate score: {{ student.marks }}%.
+                  No individual subjects recorded yet. Aggregate score: {{ student.marks }}%. Click "Add / Edit Marks" above to record subject scores!
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
+    </div>
+  </div>
 
-      <!-- Syllabus Reference Note -->
-      <div class="concept-explainer-card">
-        <div class="explainer-header">
-          <i class="fa-solid fa-lightbulb icon-bulb"></i>
-          <h3>How Route Parameters Work (Experiment 19)</h3>
+  <!-- Marks & Subjects Edit Modal -->
+  <div *ngIf="isMarksModalOpen" class="modal-backdrop">
+    <div class="modal-card modal-marks-card">
+      <div class="modal-header">
+        <h3>
+          <i class="fa-solid fa-pen-to-square me-2"></i>
+          Update Marks: {{ student?.name }} (ID #{{ student?.id }})
+        </h3>
+        <button (click)="closeMarksModal()" class="btn-close-modal">×</button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Aggregate Marks Input -->
+        <div class="aggregate-marks-box">
+          <div class="marks-header-row">
+            <label class="form-label">
+              <strong>Overall Aggregate Marks (0 - 100)</strong>
+            </label>
+            <span class="marks-preview-badge" [ngClass]="modalMarks >= 40 ? 'badge-pass' : 'badge-fail'">
+              {{ modalMarks }} / 100 • {{ modalMarks >= 40 ? 'PASSING GRADE' : 'FAIL / UNDER REVIEW' }}
+            </span>
+          </div>
+
+          <div class="marks-input-row">
+            <input 
+              type="range" 
+              [(ngModel)]="modalMarks" 
+              min="0" 
+              max="100" 
+              class="marks-slider" />
+            <input 
+              type="number" 
+              [(ngModel)]="modalMarks" 
+              min="0" 
+              max="100" 
+              class="marks-number-input" />
+          </div>
+
+          <!-- Quick Presets -->
+          <div class="marks-presets-row">
+            <span class="presets-label">Quick Presets:</span>
+            <button type="button" (click)="modalMarks = 35" class="btn-preset preset-fail">35 (Fail)</button>
+            <button type="button" (click)="modalMarks = 40" class="btn-preset preset-pass">40 (Pass)</button>
+            <button type="button" (click)="modalMarks = 65" class="btn-preset preset-good">65 (First Class)</button>
+            <button type="button" (click)="modalMarks = 88" class="btn-preset preset-dist">88 (Distinction)</button>
+          </div>
         </div>
-        <div class="explainer-content">
-          <p>
-            When a user clicks on any student link like <code>/student/{{ student.id }}</code>:
-          </p>
-          <ol>
-            <li>Angular Router matches route: <code>&#123; path: 'student/:id', component: StudentDetailComponent &#125;</code></li>
-            <li>Reads param via <code>ActivatedRoute.paramMap</code></li>
-            <li>Retrieves student from <code>StudentService.getStudentById(id)</code></li>
-          </ol>
+
+        <hr class="modal-divider" />
+
+        <!-- Subject Wise Marks Section -->
+        <div class="subject-marks-section">
+          <h4>Subject-Wise Breakdown</h4>
+
+          <div *ngIf="subjectsList.length > 0" class="subjects-edit-list">
+            <div *ngFor="let sub of subjectsList; let i = index" class="subject-edit-row">
+              <input type="text" [(ngModel)]="sub.name" placeholder="Subject Name" class="sub-name-input" />
+              <div class="sub-score-group">
+                <input type="number" [(ngModel)]="sub.marks" min="0" [max]="sub.maxMarks" class="sub-marks-input" />
+                <span class="slash-separator">/</span>
+                <input type="number" [(ngModel)]="sub.maxMarks" min="1" class="sub-max-input" />
+              </div>
+              <button (click)="removeSubject(i)" class="btn-del-sub" title="Remove subject">
+                <i class="fa-solid fa-trash-can"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Add new subject inline -->
+          <div class="add-sub-box">
+            <div class="add-sub-inputs">
+              <input 
+                type="text" 
+                [(ngModel)]="newSubName" 
+                placeholder="New Subject / Lab Name..." 
+                class="form-input add-sub-name" />
+              <input 
+                type="number" 
+                [(ngModel)]="newSubMarks" 
+                placeholder="Marks" 
+                class="form-input add-sub-marks" />
+              <input 
+                type="number" 
+                [(ngModel)]="newSubMax" 
+                placeholder="Max" 
+                class="form-input add-sub-max" />
+              <button type="button" (click)="addSubject()" class="btn-add-sub">
+                <i class="fa-solid fa-plus me-1"></i> Add Subject
+              </button>
+            </div>
+          </div>
         </div>
+      </div>
+
+      <div class="modal-footer">
+        <button (click)="closeMarksModal()" class="btn-cancel">Cancel</button>
+        <button (click)="onSaveMarks()" class="btn-save">
+          <i class="fa-solid fa-floppy-disk me-1"></i> Save Marks
+        </button>
       </div>
     </div>
   </div>

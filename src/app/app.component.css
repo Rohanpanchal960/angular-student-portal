@@ -644,3 +644,183 @@
   border-radius: 6px;
   border: 1px solid #334155;
 }
+
+/* =========================================================================
+   Header Authentication Badge & Demo Login Styles
+   ========================================================================= */
+
+.btn-header-login {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  color: #ffffff;
+  padding: 0.45rem 0.95rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35);
+  transition: all 0.18s ease;
+  white-space: nowrap;
+}
+
+.btn-header-login:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(99, 102, 241, 0.45);
+  color: #ffffff;
+}
+
+.btn-header-login.active-login {
+  background: linear-gradient(135deg, #3730a3 0%, #5b21b6 100%);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+@media (max-width: 540px) {
+  .login-btn-text {
+    display: none;
+  }
+  .btn-header-login {
+    padding: 0.45rem 0.65rem;
+  }
+}
+
+.header-auth-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #ffffff;
+  border: 1.5px solid var(--slate-200);
+  border-radius: var(--radius-pill);
+  padding: 0.25rem 0.6rem 0.25rem 0.3rem;
+  box-shadow: 0 2px 5px rgba(15, 23, 42, 0.04);
+  transition: all 0.18s;
+}
+
+.header-auth-badge:hover {
+  border-color: #818cf8;
+}
+
+.header-auth-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #e2e8f0;
+  border: 1.5px solid #6366f1;
+}
+
+.header-auth-meta {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.header-auth-name {
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #0f172a;
+  max-width: 90px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.header-auth-role {
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+@media (max-width: 640px) {
+  .header-auth-meta {
+    display: none;
+  }
+  .header-auth-badge {
+    padding: 0.25rem 0.35rem;
+  }
+}
+
+.role-admin { color: #dc2626; }
+.role-faculty { color: #0284c7; }
+.role-student { color: #059669; }
+
+.btn-header-logout {
+  background: rgba(239, 68, 68, 0.1);
+  border: none;
+  color: #ef4444;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  padding: 0;
+  margin-left: 0.15rem;
+}
+
+.btn-header-logout:hover {
+  background: #ef4444;
+  color: #ffffff;
+}
+
+/* Drawer User Card */
+.drawer-user-card {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  background: #f1f5f9;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.drawer-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 2px solid #6366f1;
+  background: #ffffff;
+}
+
+.drawer-user-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.drawer-user-info strong {
+  font-size: 0.9rem;
+  color: #0f172a;
+}
+
+.drawer-role-pill {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+}
+
+.btn-drawer-logout {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  border-radius: 8px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.btn-drawer-logout:hover {
+  background: #ef4444;
+  color: #ffffff;
+}
+
+.drawer-auth {
+  color: #4f46e5 !important;
+  font-weight: 800;
+}

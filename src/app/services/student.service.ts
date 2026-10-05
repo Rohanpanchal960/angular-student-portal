@@ -264,6 +264,50 @@ export class StudentService {
   }
 
   /**
+   * Dedicated Marks Update method: Update aggregate marks and subjects
+   */
+  updateMarks(id: number, newMarks: number, subjects?: DynamicSubject[]): Student | null {
+    const current = this.studentsSubject.getValue();
+    const index = current.findIndex(s => s.id === id);
+    if (index === -1) return null;
+
+    const existing = current[index];
+    const clampedMarks = Math.max(0, Math.min(100, Math.round(Number(newMarks))));
+
+    // If subjects provided, use them; otherwise if existing subjects exist, adjust primary subject or keep
+    let updatedSubjects = subjects ? [...subjects] : (existing.subjects ? [...existing.subjects] : []);
+    if (updatedSubjects.length === 0) {
+      updatedSubjects = [
+        { name: 'Core Computing Theory', marks: clampedMarks, maxMarks: 100 },
+        { name: 'Practical Lab Work', marks: Math.min(100, Math.max(0, clampedMarks + 3)), maxMarks: 100 }
+      ];
+    } else if (!subjects && updatedSubjects.length > 0) {
+      // Keep individual subjects proportional or update first subject
+      updatedSubjects[0] = { ...updatedSubjects[0], marks: clampedMarks };
+    }
+
+    const updated = new Student(
+      existing.id,
+      existing.name,
+      existing.course,
+      clampedMarks,
+      existing.email,
+      existing.phone,
+      existing.gender,
+      existing.address,
+      existing.photoUrl,
+      existing.enrollmentDate,
+      updatedSubjects
+    );
+
+    const listCopy = [...current];
+    listCopy[index] = updated;
+    this.studentsSubject.next(listCopy);
+    this.persistToStorage(listCopy);
+    return updated;
+  }
+
+  /**
    * [EXPERIMENT 30 CRUD - DELETE]: Remove student
    */
   deleteStudent(id: number): boolean {

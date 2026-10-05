@@ -1,80 +1,654 @@
 <div class="reports-page">
+  <!-- Top Executive Header Banner -->
   <div class="reports-header-banner">
-    <div class="badges-row">
-      <span class="badge-tag">Experiment 29 (Lazy-Loaded Module)</span>
-      <span class="badge-tag">Performance & Code-Splitting</span>
-    </div>
     <div class="header-split">
-      <div>
+      <div class="header-titles">
+        <span class="report-badge"><i class="fa-solid fa-graduation-cap me-1"></i> Academic Examination & Performance Hub</span>
         <h1>Academic Reports & Performance Analytics</h1>
         <p>
-          This entire module was dynamically downloaded via <code>loadChildren</code> lazy loading only when navigated to!
+          Official institutional performance evaluations, departmental matrices, transcript verification, and real-time merit rankings.
         </p>
       </div>
-      <button (click)="printReport()" class="btn-print">
-        <i class="fa-solid fa-print me-1"></i> Print Official Report
-      </button>
+
+      <div class="header-action-buttons">
+        <button (click)="exportToCSV()" class="btn-export-csv" title="Download Excel/CSV Report">
+          <i class="fa-solid fa-file-csv me-2"></i> Export to CSV
+        </button>
+        <button (click)="printReport()" class="btn-print" title="Print Official Academic Statement">
+          <i class="fa-solid fa-print me-2"></i> Print Official Report
+        </button>
+      </div>
     </div>
   </div>
 
-  <!-- Summary metric cards -->
-  <div class="report-kpis">
-    <div class="metric-card">
-      <span class="lbl">Total Evaluated</span>
-      <h3 class="num">{{ totalStudents }}</h3>
+  <!-- Executive Metric Summary Cards (KPIs) -->
+  <section class="report-kpis">
+    <div class="metric-card card-total">
+      <div class="metric-icon-wrap">
+        <i class="fa-solid fa-users"></i>
+      </div>
+      <div class="metric-body">
+        <span class="lbl">Total Evaluated</span>
+        <h3 class="num">{{ totalStudents }}</h3>
+        <span class="sub-lbl">Active Student Cohort</span>
+      </div>
     </div>
+
     <div class="metric-card card-green">
-      <span class="lbl">Passed Students</span>
-      <h3 class="num">{{ totalPassed }}</h3>
+      <div class="metric-icon-wrap">
+        <i class="fa-solid fa-circle-check"></i>
+      </div>
+      <div class="metric-body">
+        <span class="lbl">Passed Students</span>
+        <h3 class="num">{{ totalPassed }} <span class="rate-pct">({{ passRate }}%)</span></h3>
+        <span class="sub-lbl text-success">{{ totalPassed }} Qualified Candidates</span>
+      </div>
     </div>
-    <div class="metric-card card-red">
-      <span class="lbl">Under Review / Failed</span>
-      <h3 class="num">{{ totalFailed }}</h3>
-    </div>
+
     <div class="metric-card card-gold">
-      <span class="lbl">Distinctions (>=75%)</span>
-      <h3 class="num">{{ distinctionCount }}</h3>
+      <div class="metric-icon-wrap">
+        <i class="fa-solid fa-award"></i>
+      </div>
+      <div class="metric-body">
+        <span class="lbl">Distinctions (&gt;=75%)</span>
+        <h3 class="num">{{ distinctionCount }}</h3>
+        <span class="sub-lbl text-gold">{{ distinctionPct }}% of total students</span>
+      </div>
+    </div>
+
+    <div class="metric-card card-blue">
+      <div class="metric-icon-wrap">
+        <i class="fa-solid fa-chart-line"></i>
+      </div>
+      <div class="metric-body">
+        <span class="lbl">Cohort Average</span>
+        <h3 class="num">{{ averageScore }}%</h3>
+        <span class="sub-lbl">Cumulative Academic Benchmark</span>
+      </div>
+    </div>
+
+    <div class="metric-card card-red">
+      <div class="metric-icon-wrap">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+      </div>
+      <div class="metric-body">
+        <span class="lbl">Under Review / Failed</span>
+        <h3 class="num">{{ totalFailed }}</h3>
+        <span class="sub-lbl text-danger">{{ failPct }}% require remediation</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Grade Distribution Visualization Bar -->
+  <div class="grade-distribution-card">
+    <div class="distribution-header">
+      <h4><i class="fa-solid fa-chart-simple me-2"></i> Grade Distribution Breakdown</h4>
+      <span class="distribution-total">Sample Size: {{ totalStudents }} Students</span>
+    </div>
+
+    <div class="progress-segmented-bar">
+      <div 
+        class="progress-seg seg-distinction" 
+        [style.width.%]="distinctionPct" 
+        [title]="'Distinction (>=75%): ' + distinctionCount + ' (' + distinctionPct + '%)'">
+        <span *ngIf="distinctionPct >= 10">{{ distinctionPct }}%</span>
+      </div>
+      <div 
+        class="progress-seg seg-first" 
+        [style.width.%]="firstClassPct" 
+        [title]="'First Class (60-74%): ' + firstClassCount + ' (' + firstClassPct + '%)'">
+        <span *ngIf="firstClassPct >= 10">{{ firstClassPct }}%</span>
+      </div>
+      <div 
+        class="progress-seg seg-pass" 
+        [style.width.%]="passClassPct" 
+        [title]="'Pass Class (40-59%): ' + passClassCount + ' (' + passClassPct + '%)'">
+        <span *ngIf="passClassPct >= 10">{{ passClassPct }}%</span>
+      </div>
+      <div 
+        class="progress-seg seg-fail" 
+        [style.width.%]="failPct" 
+        [title]="'Failed (<40%): ' + totalFailed + ' (' + failPct + '%)'">
+        <span *ngIf="failPct >= 10">{{ failPct }}%</span>
+      </div>
+    </div>
+
+    <div class="distribution-legend">
+      <div class="legend-item">
+        <span class="legend-dot dot-distinction"></span>
+        <span>Distinction (&ge;75%): <strong>{{ distinctionCount }} ({{ distinctionPct }}%)</strong></span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-dot dot-first"></span>
+        <span>First Class (60-74%): <strong>{{ firstClassCount }} ({{ firstClassPct }}%)</strong></span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-dot dot-pass"></span>
+        <span>Pass Class (40-59%): <strong>{{ passClassCount }} ({{ passClassPct }}%)</strong></span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-dot dot-fail"></span>
+        <span>Failed / Retake (&lt;40%): <strong>{{ totalFailed }} ({{ failPct }}%)</strong></span>
+      </div>
     </div>
   </div>
 
-  <!-- Course Wise Tabular Breakdown -->
-  <div class="course-reports-section">
-    <h2>Course-wise Academic Performance Matrix</h2>
-    
-    <div *ngFor="let course of courses" class="course-matrix-card">
-      <div class="matrix-header">
-        <h3>{{ course }} Program Report</h3>
-        <span class="student-count-pill">{{ getStudentsByCourse(course).length }} Students Registered</span>
+  <!-- Tabbed View Switcher -->
+  <div class="report-nav-tabs">
+    <button 
+      (click)="activeTab = 'master'" 
+      class="nav-tab-btn" 
+      [class.active]="activeTab === 'master'">
+      <i class="fa-solid fa-table-list me-2"></i> Master Performance Matrix
+    </button>
+    <button 
+      (click)="activeTab = 'department'" 
+      class="nav-tab-btn" 
+      [class.active]="activeTab === 'department'">
+      <i class="fa-solid fa-building-columns me-2"></i> Department Analytics
+    </button>
+    <button 
+      (click)="activeTab = 'merit'" 
+      class="nav-tab-btn" 
+      [class.active]="activeTab === 'merit'">
+      <i class="fa-solid fa-trophy me-2"></i> Merit List & Top Rankers
+    </button>
+  </div>
+
+  <!-- TAB 1: MASTER PERFORMANCE MATRIX -->
+  <div *ngIf="activeTab === 'master'" class="tab-pane">
+    <!-- Filter, Search and Sorting Bar -->
+    <div class="report-toolbar">
+      <div class="search-box">
+        <i class="fa-solid fa-magnifying-glass search-ico"></i>
+        <input 
+          type="text" 
+          [(ngModel)]="searchTerm" 
+          placeholder="Search by student name, roll ID, or email..." 
+          class="report-search-input" />
+        <button *ngIf="searchTerm" (click)="searchTerm = ''" class="btn-clear-search">×</button>
+      </div>
+
+      <div class="filter-group">
+        <!-- Course Filter -->
+        <select [(ngModel)]="selectedCourse" class="select-control">
+          <option value="ALL">All Degree Programs</option>
+          <option *ngFor="let c of courses" [value]="c">{{ c }} Program</option>
+        </select>
+
+        <!-- Grade Filter -->
+        <select [(ngModel)]="selectedGrade" class="select-control">
+          <option value="ALL">All Grades & Statuses</option>
+          <option value="DISTINCTION">Distinction Only (&ge; 75%)</option>
+          <option value="FIRST_CLASS">First Class (60 - 74%)</option>
+          <option value="PASS_CLASS">Pass Class (40 - 59%)</option>
+          <option value="FAIL">Failed Only (&lt; 40%)</option>
+        </select>
+
+        <!-- Sort Control -->
+        <select [(ngModel)]="selectedSort" class="select-control">
+          <option value="marks_desc">Sort: Marks (Highest First)</option>
+          <option value="marks_asc">Sort: Marks (Lowest First)</option>
+          <option value="name_asc">Sort: Name (A to Z)</option>
+          <option value="id_asc">Sort: Roll ID (Ascending)</option>
+        </select>
+
+        <button (click)="clearFilters()" class="btn-reset-filters" title="Reset all filters">
+          <i class="fa-solid fa-arrows-rotate"></i> Reset
+        </button>
+      </div>
+    </div>
+
+    <!-- Master Table -->
+    <div class="table-card">
+      <div class="table-header-info">
+        <h3>Master Examination Ledger</h3>
+        <span class="record-counter">
+          Showing <strong>{{ filteredStudents.length }}</strong> of {{ totalStudents }} registered records
+        </span>
       </div>
 
       <div class="table-responsive">
         <table class="report-table">
           <thead>
             <tr>
-              <th>Roll / ID</th>
-              <th>Student Name</th>
+              <th>Roll ID</th>
+              <th>Student Profile</th>
+              <th>Course / Program</th>
               <th>Marks (%)</th>
-              <th>Grade</th>
+              <th>CGPA (Scale 10)</th>
+              <th>Letter Grade</th>
               <th>Result Status</th>
+              <th class="text-end">Official Actions</th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let s of getStudentsByCourse(course)">
-              <td>#{{ s.id }}</td>
-              <td><strong>{{ s.name }}</strong></td>
-              <td>{{ s.marks }}%</td>
-              <td>{{ s.marks >= 75 ? 'Distinction (A+)' : s.marks >= 60 ? 'First Class (A)' : s.marks >= 40 ? 'Pass Class (C)' : 'Fail (F)' }}</td>
+            <tr *ngFor="let s of filteredStudents" class="data-row">
+              <td class="col-roll">
+                <span class="roll-badge">#{{ s.id }}</span>
+              </td>
+              <td class="col-student">
+                <div class="student-mini-profile">
+                  <img 
+                    [src]="s.photoUrl || 'https://api.dicebear.com/7.x/avataaars/svg?seed=' + s.name" 
+                    [alt]="s.name" 
+                    class="student-table-avatar" />
+                  <div class="student-names">
+                    <strong>{{ s.name }}</strong>
+                    <span class="student-email">{{ s.email || 'No email registered' }}</span>
+                  </div>
+                </div>
+              </td>
               <td>
-                <span class="result-badge" [class.pass]="s.marks >= 40" [class.fail]="s.marks < 40">
-                  {{ s.marks >= 40 ? 'QUALIFIED' : 'FAILED' }}
+                <span class="course-pill-tag">{{ s.course }}</span>
+              </td>
+              <td>
+                <div class="marks-cell">
+                  <strong class="marks-val" [class.text-pass]="s.marks >= 40" [class.text-fail]="s.marks < 40">
+                    {{ s.marks }}%
+                  </strong>
+                  <div class="marks-mini-track">
+                    <div 
+                      class="marks-mini-bar" 
+                      [style.width.%]="s.marks" 
+                      [ngClass]="s.marks >= 75 ? 'bar-dist' : s.marks >= 40 ? 'bar-pass' : 'bar-fail'">
+                    </div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <span class="cgpa-pill">{{ calculateCGPA(s.marks) }}</span>
+              </td>
+              <td>
+                <span class="grade-letter-pill" [ngClass]="'grade-' + s.getGrade().toLowerCase()">
+                  {{ s.getGrade() }}
                 </span>
               </td>
+              <td>
+                <span class="result-badge" [class.pass]="s.marks >= 40" [class.fail]="s.marks < 40" [class.distinction]="s.marks >= 75">
+                  <i class="fa-solid" [ngClass]="s.marks >= 75 ? 'fa-award' : s.marks >= 40 ? 'fa-check' : 'fa-xmark'"></i>
+                  {{ s.marks >= 75 ? 'DISTINCTION' : s.marks >= 40 ? 'QUALIFIED' : 'FAILED' }}
+                </span>
+              </td>
+              <td class="text-end">
+                <button (click)="openMarksheet(s)" class="btn-view-marksheet" title="Generate Official Marksheet">
+                  <i class="fa-solid fa-file-invoice me-1"></i> View Marksheet
+                </button>
+              </td>
             </tr>
-            <tr *ngIf="getStudentsByCourse(course).length === 0">
-              <td colspan="5" class="empty-note">No student enrollments in this course yet.</td>
+
+            <tr *ngIf="filteredStudents.length === 0">
+              <td colspan="8" class="empty-table-cell">
+                <div class="empty-state-wrap">
+                  <i class="fa-solid fa-filter-circle-xmark empty-icon"></i>
+                  <h4>No Matching Student Records Found</h4>
+                  <p>Try clearing your search keyword or relaxing course and grade filters.</p>
+                  <button (click)="clearFilters()" class="btn-clear-empty">
+                    <i class="fa-solid fa-arrows-rotate me-1"></i> Reset Filters
+                  </button>
+                </div>
+              </td>
             </tr>
           </tbody>
         </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2: DEPARTMENT-WISE ANALYTICS -->
+  <div *ngIf="activeTab === 'department'" class="tab-pane">
+    <div class="department-grid">
+      <div *ngFor="let dept of departmentAnalytics" class="department-card">
+        <div class="dept-header">
+          <div class="dept-title-wrap">
+            <span class="dept-icon"><i class="fa-solid fa-school"></i></span>
+            <div>
+              <h3>{{ dept.course }} Department</h3>
+              <span class="dept-enrollment">{{ dept.total }} Students Enrolled</span>
+            </div>
+          </div>
+          <div class="dept-pass-rate">
+            <span class="pass-lbl">Passing Rate</span>
+            <strong class="pass-num" [class.text-success]="dept.passPercentage >= 60" [class.text-danger]="dept.passPercentage < 60">
+              {{ dept.passPercentage }}%
+            </strong>
+          </div>
+        </div>
+
+        <div class="dept-stats-row">
+          <div class="dept-stat-box">
+            <span class="d-lbl">Passed</span>
+            <strong class="d-val text-success">{{ dept.passed }}</strong>
+          </div>
+          <div class="dept-stat-box">
+            <span class="d-lbl">Under Review</span>
+            <strong class="d-val text-danger">{{ dept.failed }}</strong>
+          </div>
+          <div class="dept-stat-box">
+            <span class="d-lbl">Dept Average</span>
+            <strong class="d-val">{{ dept.averageMarks }}%</strong>
+          </div>
+          <div class="dept-stat-box">
+            <span class="d-lbl">Top Student</span>
+            <strong class="d-val text-primary">{{ dept.topStudent ? dept.topStudent.name : 'N/A' }}</strong>
+          </div>
+        </div>
+
+        <!-- Dept Pass Track -->
+        <div class="dept-progress-wrap">
+          <div class="dept-progress-track">
+            <div class="dept-progress-fill" [style.width.%]="dept.passPercentage"></div>
+          </div>
+        </div>
+
+        <!-- Roster Table for Department -->
+        <div class="dept-roster-wrap">
+          <table class="dept-table">
+            <thead>
+              <tr>
+                <th>Roll</th>
+                <th>Student</th>
+                <th>Score</th>
+                <th>Grade</th>
+                <th>Result</th>
+                <th class="text-end">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let s of getStudentsByCourse(dept.course)">
+                <td>#{{ s.id }}</td>
+                <td><strong>{{ s.name }}</strong></td>
+                <td>{{ s.marks }}%</td>
+                <td><span class="mini-grade">{{ s.getGrade() }}</span></td>
+                <td>
+                  <span class="mini-status" [class.pass]="s.marks >= 40" [class.fail]="s.marks < 40">
+                    {{ s.marks >= 40 ? 'PASS' : 'FAIL' }}
+                  </span>
+                </td>
+                <td class="text-end">
+                  <button (click)="openMarksheet(s)" class="btn-table-action" title="View Official Marksheet">
+                    <i class="fa-solid fa-file-invoice"></i>
+                  </button>
+                </td>
+              </tr>
+              <tr *ngIf="getStudentsByCourse(dept.course).length === 0">
+                <td colspan="6" class="text-center py-3 text-muted">No student enrollments in this program.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3: MERIT LIST & TOP RANKERS -->
+  <div *ngIf="activeTab === 'merit'" class="tab-pane">
+    <div class="merit-section">
+      <!-- Top 3 Podium Cards -->
+      <div *ngIf="topRankers.length >= 3" class="podium-row">
+        <!-- Rank 2: Silver -->
+        <div class="podium-card rank-2">
+          <div class="medal-crown silver-medal">
+            <i class="fa-solid fa-medal"></i>
+            <span>#2</span>
+          </div>
+          <img 
+            [src]="topRankers[1].photoUrl || 'https://api.dicebear.com/7.x/avataaars/svg?seed=' + topRankers[1].name" 
+            [alt]="topRankers[1].name" 
+            class="podium-avatar" />
+          <h3 class="podium-name">{{ topRankers[1].name }}</h3>
+          <span class="podium-course">{{ topRankers[1].course }}</span>
+          <div class="podium-score">{{ topRankers[1].marks }}%</div>
+          <span class="podium-tag">Silver Scholar</span>
+          <button (click)="openMarksheet(topRankers[1])" class="btn-podium-sheet">
+            <i class="fa-solid fa-file-invoice me-1"></i> View Marksheet
+          </button>
+        </div>
+
+        <!-- Rank 1: Gold -->
+        <div class="podium-card rank-1">
+          <div class="top-trophy-badge">
+            <i class="fa-solid fa-crown text-warning"></i> TOP RANKER
+          </div>
+          <div class="medal-crown gold-medal">
+            <i class="fa-solid fa-trophy"></i>
+            <span>#1</span>
+          </div>
+          <img 
+            [src]="topRankers[0].photoUrl || 'https://api.dicebear.com/7.x/avataaars/svg?seed=' + topRankers[0].name" 
+            [alt]="topRankers[0].name" 
+            class="podium-avatar avatar-gold" />
+          <h3 class="podium-name">{{ topRankers[0].name }}</h3>
+          <span class="podium-course">{{ topRankers[0].course }}</span>
+          <div class="podium-score text-gold">{{ topRankers[0].marks }}%</div>
+          <span class="podium-tag tag-gold">Gold Medalist • CGPA {{ calculateCGPA(topRankers[0].marks) }}</span>
+          <button (click)="openMarksheet(topRankers[0])" class="btn-podium-sheet btn-gold">
+            <i class="fa-solid fa-file-invoice me-1"></i> View Marksheet
+          </button>
+        </div>
+
+        <!-- Rank 3: Bronze -->
+        <div class="podium-card rank-3">
+          <div class="medal-crown bronze-medal">
+            <i class="fa-solid fa-award"></i>
+            <span>#3</span>
+          </div>
+          <img 
+            [src]="topRankers[2].photoUrl || 'https://api.dicebear.com/7.x/avataaars/svg?seed=' + topRankers[2].name" 
+            [alt]="topRankers[2].name" 
+            class="podium-avatar" />
+          <h3 class="podium-name">{{ topRankers[2].name }}</h3>
+          <span class="podium-course">{{ topRankers[2].course }}</span>
+          <div class="podium-score">{{ topRankers[2].marks }}%</div>
+          <span class="podium-tag">Bronze Scholar</span>
+          <button (click)="openMarksheet(topRankers[2])" class="btn-podium-sheet">
+            <i class="fa-solid fa-file-invoice me-1"></i> View Marksheet
+          </button>
+        </div>
+      </div>
+
+      <!-- Complete Honor Roll Table -->
+      <div class="table-card mt-4">
+        <div class="table-header-info">
+          <h3>Complete University Honor Roll</h3>
+          <span class="record-counter">Ranked by aggregate percentage</span>
+        </div>
+
+        <div class="table-responsive">
+          <table class="report-table">
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>Roll ID</th>
+                <th>Student Candidate</th>
+                <th>Degree Program</th>
+                <th>Percentage</th>
+                <th>CGPA</th>
+                <th>Grade</th>
+                <th>Honor Status</th>
+                <th class="text-end">Marksheet</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let s of topRankers; let idx = index" class="data-row">
+                <td>
+                  <span class="rank-badge" [class.rank-top1]="idx === 0" [class.rank-top2]="idx === 1" [class.rank-top3]="idx === 2">
+                    #{{ idx + 1 }}
+                  </span>
+                </td>
+                <td>#{{ s.id }}</td>
+                <td>
+                  <div class="student-mini-profile">
+                    <img 
+                      [src]="s.photoUrl || 'https://api.dicebear.com/7.x/avataaars/svg?seed=' + s.name" 
+                      [alt]="s.name" 
+                      class="student-table-avatar" />
+                    <strong>{{ s.name }}</strong>
+                  </div>
+                </td>
+                <td><span class="course-pill-tag">{{ s.course }}</span></td>
+                <td><strong class="text-pass">{{ s.marks }}%</strong></td>
+                <td><span class="cgpa-pill">{{ calculateCGPA(s.marks) }}</span></td>
+                <td><span class="grade-letter-pill" [ngClass]="'grade-' + s.getGrade().toLowerCase()">{{ s.getGrade() }}</span></td>
+                <td>
+                  <span class="honor-badge" *ngIf="s.marks >= 75">
+                    <i class="fa-solid fa-star text-warning me-1"></i> Dean's Honor List
+                  </span>
+                  <span class="text-muted" *ngIf="s.marks < 75 && s.marks >= 40">Qualified</span>
+                  <span class="text-danger" *ngIf="s.marks < 40">Retake</span>
+                </td>
+                <td class="text-end">
+                  <button (click)="openMarksheet(s)" class="btn-view-marksheet">
+                    <i class="fa-solid fa-file-invoice me-1"></i> Marksheet
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- OFFICIAL STUDENT MARKSHEET / TRANSCRIPT MODAL                             -->
+  <!-- ========================================================================= -->
+  <div *ngIf="selectedStudentForMarksheet" class="marksheet-modal-backdrop" (click)="closeMarksheet()">
+    <div class="marksheet-modal-card" (click)="$event.stopPropagation()">
+      <!-- Printable Marksheet Container -->
+      <div class="marksheet-print-area">
+        <!-- University Header Bar -->
+        <div class="sheet-university-header">
+          <div class="univ-crest">
+            <i class="fa-solid fa-graduation-cap"></i>
+          </div>
+          <div class="univ-details">
+            <h2>UNIVERSITY OF COMPUTER STUDIES & SCIENCES</h2>
+            <p class="univ-sub">Accredited Grade 'A' Institutional Portal • Office of the Controller of Examinations</p>
+            <h3 class="transcript-title">OFFICIAL PROVISIONAL STATEMENT OF MARKS</h3>
+          </div>
+        </div>
+
+        <div class="sheet-divider-line"></div>
+
+        <!-- Student Meta Information Grid -->
+        <div class="sheet-student-meta-grid">
+          <div class="meta-item">
+            <span class="meta-label">Student Full Name:</span>
+            <strong class="meta-value">{{ selectedStudentForMarksheet.name }}</strong>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Enrollment / Roll ID:</span>
+            <strong class="meta-value">#{{ selectedStudentForMarksheet.id }}</strong>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Degree Program:</span>
+            <strong class="meta-value">{{ selectedStudentForMarksheet.course }} Program</strong>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Academic Term:</span>
+            <strong class="meta-value">AY 2025-2026 (Final Semester)</strong>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Contact Email:</span>
+            <strong class="meta-value">{{ selectedStudentForMarksheet.email || 'records@university.edu' }}</strong>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Verification Code:</span>
+            <strong class="meta-value font-mono">SMS-TR-{{ selectedStudentForMarksheet.id }}-{{ selectedStudentForMarksheet.marks }}</strong>
+          </div>
+        </div>
+
+        <!-- Subject-Wise Evaluation Table -->
+        <div class="sheet-table-wrap">
+          <table class="marksheet-table">
+            <thead>
+              <tr>
+                <th style="width: 8%;">Sr.</th>
+                <th>Subject / Coursework Title</th>
+                <th style="width: 15%; text-align: center;">Max Marks</th>
+                <th style="width: 18%; text-align: center;">Marks Obtained</th>
+                <th style="width: 15%; text-align: center;">Grade Point</th>
+                <th style="width: 15%; text-align: center;">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let sub of marksheetSubjects; let i = index">
+                <td style="text-align: center;">{{ i + 1 }}</td>
+                <td><strong>{{ sub.name }}</strong></td>
+                <td style="text-align: center;">{{ sub.maxMarks }}</td>
+                <td style="text-align: center;"><strong>{{ sub.marksObtained }}</strong></td>
+                <td style="text-align: center;">{{ sub.gradePoint }} / 10.0</td>
+                <td style="text-align: center;">
+                  <span class="sheet-status-pill" [class.pass]="sub.status === 'PASS'" [class.fail]="sub.status === 'FAIL'">
+                    {{ sub.status }}
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Cumulative Summary Matrix -->
+        <div class="sheet-summary-box">
+          <div class="summary-col">
+            <span class="s-label">Cumulative Percentage</span>
+            <h4 class="s-val" [class.text-pass]="selectedStudentForMarksheet.marks >= 40" [class.text-fail]="selectedStudentForMarksheet.marks < 40">
+              {{ selectedStudentForMarksheet.marks }}%
+            </h4>
+          </div>
+          <div class="summary-col">
+            <span class="s-label">Calculated CGPA</span>
+            <h4 class="s-val text-primary">{{ calculateCGPA(selectedStudentForMarksheet.marks) }} / 10.0</h4>
+          </div>
+          <div class="summary-col">
+            <span class="s-label">Letter Grade</span>
+            <h4 class="s-val">{{ selectedStudentForMarksheet.getGrade() }}</h4>
+          </div>
+          <div class="summary-col col-result">
+            <span class="s-label">Final Evaluation Classification</span>
+            <h4 class="s-val" [class.text-pass]="selectedStudentForMarksheet.marks >= 40" [class.text-fail]="selectedStudentForMarksheet.marks < 40">
+              {{ selectedStudentForMarksheet.marks >= 75 ? 'PASSED - FIRST CLASS WITH DISTINCTION' : selectedStudentForMarksheet.marks >= 60 ? 'PASSED - FIRST CLASS' : selectedStudentForMarksheet.marks >= 40 ? 'PASSED - PASS CLASS' : 'FAILED - NEEDS REMEDIATION' }}
+            </h4>
+          </div>
+        </div>
+
+        <!-- Official Signatures & Seal -->
+        <div class="sheet-seal-row">
+          <div class="seal-cell">
+            <div class="fake-qr-code">
+              <i class="fa-solid fa-qrcode"></i>
+            </div>
+            <span class="qr-caption">Scan to Verify Authentic Record</span>
+          </div>
+
+          <div class="seal-cell text-center">
+            <div class="official-stamp-circle">
+              <span>CONTROLLER</span>
+              <span>OF</span>
+              <span>EXAMINATIONS</span>
+            </div>
+          </div>
+
+          <div class="seal-cell text-end">
+            <div class="signature-line">
+              <span class="sig-script">Dr. K. N. Mehta</span>
+              <div class="sig-border"></div>
+              <strong>Controller of Examinations</strong>
+              <small>University Assessment Board</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Footer (Screen Only) -->
+      <div class="modal-footer-screen">
+        <button (click)="printReport()" class="btn-modal-print">
+          <i class="fa-solid fa-print me-2"></i> Print Official Marksheet
+        </button>
+        <button (click)="closeMarksheet()" class="btn-modal-close">
+          Close Marksheet
+        </button>
       </div>
     </div>
   </div>

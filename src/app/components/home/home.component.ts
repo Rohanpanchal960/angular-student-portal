@@ -22,21 +22,20 @@ import { RouterModule } from '@angular/router';
   template: `
     <div class="home-page">
       <div class="home-hero">
-        <span class="pill-badge">University ERP • Experiment 18 Routing</span>
+        <span class="pill-badge">University Student ERP Portal</span>
         <h1>Comprehensive Student Management System</h1>
         <p class="hero-desc">
-          An enterprise-grade, interactive educational portal covering all 30 laboratory experiments
-          from the university Angular Framework syllabus with complete CRUD, reactive forms, custom pipes,
-          directives, and lazy loading.
+          An enterprise-grade, interactive educational portal with complete student CRUD operations,
+          dynamic marksheets, performance analytics, and official transcript generation.
         </p>
         <div class="hero-cta-row">
           <a routerLink="/students" class="btn-primary">
             <i class="fa-solid fa-users me-2"></i>
-            Explore Student Directory (Exp 30 CRUD)
+            Explore Student Directory
           </a>
-          <a routerLink="/experiments" class="btn-secondary">
-            <i class="fa-solid fa-flask-vial me-2"></i>
-            View All 30 Syllabus Experiments
+          <a routerLink="/reports" class="btn-secondary">
+            <i class="fa-solid fa-chart-line me-2"></i>
+            View Academic Reports
           </a>
         </div>
       </div>
@@ -45,23 +44,23 @@ import { RouterModule } from '@angular/router';
       <div class="feature-grid">
         <div class="feat-card">
           <i class="fa-solid fa-bolt feat-icon"></i>
-          <h3>Angular 18 Modern Architecture</h3>
+          <h3>Modern Angular Architecture</h3>
           <p>Built with Standalone Components, TypeScript strong typing, and RxJS reactive streams.</p>
         </div>
         <div class="feat-card">
           <i class="fa-solid fa-file-signature feat-icon"></i>
-          <h3>Dual Forms & Validation</h3>
-          <p>Template-Driven Admissions (Exp 21) & Reactive FormArray with password strength validators (Exp 22-24).</p>
+          <h3>Admissions & Form Validation</h3>
+          <p>Online student registration and dynamic multi-subject academic marks evaluations.</p>
         </div>
         <div class="feat-card">
           <i class="fa-solid fa-bullseye feat-icon"></i>
-          <h3>Custom Directives & Pipes</h3>
-          <p>Initials Abbreviate Pipe (Exp 12) and Deadline Overdue Highlighting Attribute Directive (Exp 13).</p>
+          <h3>Task & Deadline Tracking</h3>
+          <p>Student assignments, submissions, and automatic overdue status highlighting.</p>
         </div>
         <div class="feat-card">
-          <i class="fa-solid fa-rocket feat-icon"></i>
-          <h3>Production & Lazy Loading</h3>
-          <p>Performance optimization with lazy-loaded ReportsModule (Exp 29) and Netlify deployment readiness (Exp 28).</p>
+          <i class="fa-solid fa-chart-line feat-icon"></i>
+          <h3>Analytics & Reporting</h3>
+          <p>Course performance analytics, printable transcripts, and instant CSV data export.</p>
         </div>
       </div>
     </div>

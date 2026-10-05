@@ -1,14 +1,9 @@
 <div class="tasks-page">
   <!-- Header -->
   <div class="tasks-header">
-    <div class="badges-row">
-      <span class="badge-tag">Experiment 13 (Custom Directive)</span>
-      <span class="badge-tag">ElementRef & Renderer2</span>
-    </div>
     <h1>Student Assignments & Submission Deadlines</h1>
     <p>
-      Demonstrating the custom <code>appHighlightOverdue</code> directive which automatically
-      highlights overdue tasks in red styling.
+      Track assignment submissions, coursework projects, and academic deadlines. Overdue items are automatically highlighted.
     </p>
   </div>
 
@@ -33,20 +28,19 @@
         type="date" 
         [(ngModel)]="newTask.dueDate" 
         class="input-date" 
-        title="Due date (Pick yesterday to test overdue highlight!)" />
+        title="Due date" />
 
       <button (click)="addNewTask()" class="btn-add-task">
         <i class="fa-solid fa-plus me-1"></i> Add Assignment
       </button>
     </div>
     <span class="hint-date">
-      <i class="fa-solid fa-lightbulb me-1"></i> Tip: Pick a date in the past (before today: {{ todayDateStr }}) to see the custom directive highlight it in red!
+      <i class="fa-solid fa-lightbulb me-1"></i> Tip: Deadlines scheduled before today are automatically highlighted with an alert status.
     </span>
   </div>
 
   <!-- Tasks List -->
   <div class="tasks-list">
-    <!-- [EXPERIMENT 13]: Custom Directive [appHighlightOverdue] applied on task element -->
     <div 
       *ngFor="let task of tasks" 
       [appHighlightOverdue]="task.dueDate" 
@@ -69,7 +63,7 @@
           </span>
           <!-- Overdue Badge -->
           <span *ngIf="isTaskOverdue(task)" class="overdue-warning-badge">
-            <i class="fa-solid fa-triangle-exclamation me-1"></i> OVERDUE DEADLINE (Exp 13)
+            <i class="fa-solid fa-triangle-exclamation me-1"></i> OVERDUE DEADLINE
           </span>
         </div>
 
