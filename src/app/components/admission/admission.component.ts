@@ -135,7 +135,7 @@ export class AdmissionComponent implements OnInit {
       address: this.templateModel.address
     });
 
-    this.submissionSuccess = `🎉 Admission Successful! Student "${created.name}" enrolled into ${created.course} with Student ID #${created.id}.`;
+    this.submissionSuccess = `Admission Successful! Student "${created.name}" enrolled into ${created.course} with Student ID #${created.id}.`;
     form.resetForm({ gender: 'Male', course: Course.MCA });
 
     setTimeout(() => {
@@ -169,7 +169,7 @@ export class AdmissionComponent implements OnInit {
       subjects: subs
     });
 
-    this.submissionSuccess = `🎉 Dynamic Form Submitted! Enrolled "${created.name}" with ${subs.length} subjects and aggregate score ${avgMarks}%. (ID #${created.id})`;
+    this.submissionSuccess = `Dynamic Form Submitted! Enrolled "${created.name}" with ${subs.length} subjects and aggregate score ${avgMarks}%. (ID #${created.id})`;
     this.initDynamicForm();
 
     setTimeout(() => {

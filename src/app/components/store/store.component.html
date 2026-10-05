@@ -1,8 +1,8 @@
 <div class="store-page">
   <!-- Toast alert on purchase -->
   <div *ngIf="toastMessage" class="store-toast">
-    <span>{{ toastMessage }}</span>
-    <button (click)="toastMessage = null" class="btn-close-toast">×</button>
+    <span><i class="fa-solid fa-circle-check"></i> {{ toastMessage }}</span>
+    <button (click)="toastMessage = null" class="btn-close-toast" aria-label="Close notification"><i class="fa-solid fa-xmark"></i></button>
   </div>
 
   <!-- Header Banner -->
@@ -38,8 +38,8 @@
         <h4>{{ currentCourseDetails.name }} Program Overview</h4>
         <p>{{ currentCourseDetails.description }}</p>
         <div class="course-stats">
-          <span>⏳ Duration: <strong>{{ currentCourseDetails.durationYears }} Years</strong></span>
-          <span>📅 Semesters: <strong>{{ currentCourseDetails.semesterCount }} Semesters</strong></span>
+          <span><i class="fa-solid fa-hourglass-half me-1"></i> Duration: <strong>{{ currentCourseDetails.durationYears }} Years</strong></span>
+          <span><i class="fa-solid fa-calendar-days me-1"></i> Semesters: <strong>{{ currentCourseDetails.semesterCount }} Semesters</strong></span>
         </div>
       </div>
     </div>
@@ -58,7 +58,7 @@
     </div>
 
     <div class="cart-indicator">
-      <span>🛒 Items Purchased: <strong>{{ purchasedCount }}</strong></span>
+      <span><i class="fa-solid fa-cart-shopping me-1"></i> Items Purchased: <strong>{{ purchasedCount }}</strong></span>
     </div>
   </div>
 
@@ -68,6 +68,7 @@
       <div class="prod-badge-row">
         <span class="category-badge">{{ prod.category }}</span>
         <span class="stock-badge" [class.in-stock]="prod.inStock" [class.out-stock]="!prod.inStock">
+          <i class="fa-solid" [ngClass]="prod.inStock ? 'fa-check' : 'fa-xmark'"></i>
           {{ prod.inStock ? 'In Stock' : 'Out of Stock' }}
         </span>
       </div>
@@ -104,7 +105,8 @@
             [disabled]="!prod.inStock" 
             class="btn-buy-now" 
             title="Click to trigger Exp 9 event binding">
-            <span>{{ prod.inStock ? '🛍️ Buy Now' : '🚫 Out of Stock' }}</span>
+            <i class="fa-solid" [ngClass]="prod.inStock ? 'fa-cart-shopping' : 'fa-ban'"></i>
+            <span>{{ prod.inStock ? 'Buy Now' : 'Out of Stock' }}</span>
           </button>
         </div>
       </div>

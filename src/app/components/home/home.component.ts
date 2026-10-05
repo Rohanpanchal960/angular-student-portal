@@ -31,10 +31,12 @@ import { RouterModule } from '@angular/router';
         </p>
         <div class="hero-cta-row">
           <a routerLink="/students" class="btn-primary">
-            👥 Explore Student Directory (Exp 30 CRUD)
+            <i class="fa-solid fa-users me-2"></i>
+            Explore Student Directory (Exp 30 CRUD)
           </a>
           <a routerLink="/experiments" class="btn-secondary">
-            🧪 View All 30 Syllabus Experiments
+            <i class="fa-solid fa-flask-vial me-2"></i>
+            View All 30 Syllabus Experiments
           </a>
         </div>
       </div>
@@ -42,22 +44,22 @@ import { RouterModule } from '@angular/router';
       <!-- Feature cards grid -->
       <div class="feature-grid">
         <div class="feat-card">
-          <span class="feat-icon">⚡</span>
+          <i class="fa-solid fa-bolt feat-icon"></i>
           <h3>Angular 18 Modern Architecture</h3>
           <p>Built with Standalone Components, TypeScript strong typing, and RxJS reactive streams.</p>
         </div>
         <div class="feat-card">
-          <span class="feat-icon">📝</span>
+          <i class="fa-solid fa-file-signature feat-icon"></i>
           <h3>Dual Forms & Validation</h3>
           <p>Template-Driven Admissions (Exp 21) & Reactive FormArray with password strength validators (Exp 22-24).</p>
         </div>
         <div class="feat-card">
-          <span class="feat-icon">🎯</span>
+          <i class="fa-solid fa-bullseye feat-icon"></i>
           <h3>Custom Directives & Pipes</h3>
           <p>Initials Abbreviate Pipe (Exp 12) and Deadline Overdue Highlighting Attribute Directive (Exp 13).</p>
         </div>
         <div class="feat-card">
-          <span class="feat-icon">🚀</span>
+          <i class="fa-solid fa-rocket feat-icon"></i>
           <h3>Production & Lazy Loading</h3>
           <p>Performance optimization with lazy-loaded ReportsModule (Exp 29) and Netlify deployment readiness (Exp 28).</p>
         </div>
@@ -139,7 +141,7 @@ import { RouterModule } from '@angular/router';
       transition: transform 0.2s;
     }
     .feat-card:hover { transform: translateY(-3px); }
-    .feat-icon { font-size: 2rem; margin-bottom: 0.75rem; display: inline-block; }
+    .feat-icon { font-size: 2rem; margin-bottom: 0.75rem; display: inline-block; color: #4f46e5; }
     .feat-card h3 { margin: 0 0 0.5rem 0; font-size: 1.15rem; color: #0f172a; }
     .feat-card p { margin: 0; font-size: 0.88rem; color: #64748b; line-height: 1.5; }
   `]

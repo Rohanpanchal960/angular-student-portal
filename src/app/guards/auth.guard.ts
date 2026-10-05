@@ -33,7 +33,7 @@ export const authGuard: CanActivateFn = (route, state) => {
   }
 
   // User is not logged in -> Block navigation and redirect to login
-  alert('🔒 ACCESS DENIED: The /admin page is protected by AuthGuard! Please login with valid credentials first.');
+  alert('ACCESS DENIED: The /admin page is protected by AuthGuard! Please login with valid credentials first.');
   router.navigate(['/admin-login'], { queryParams: { returnUrl: state.url } });
   return false;
 };

@@ -75,7 +75,7 @@ export class StoreComponent {
     console.log(`[EXPERIMENT 9 EVENT LOG]: Student clicked Buy Now for product -> ${product.name} (ID: ${product.id}, Price: ₹${product.price})`);
 
     // Show on-screen user confirmation toast
-    this.toastMessage = `🎉 Order Placed! You successfully purchased "${product.name}" for ₹${product.price}.`;
+    this.toastMessage = `Order Placed! You successfully purchased "${product.name}" for ₹${product.price}.`;
 
     setTimeout(() => {
       this.toastMessage = null;

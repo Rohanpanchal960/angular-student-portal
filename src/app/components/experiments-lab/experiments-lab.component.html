@@ -54,12 +54,12 @@
       <h3 class="exp-title">{{ exp.title }}</h3>
 
       <div class="exp-objective">
-        <strong>🎯 Syllabus Objective:</strong>
+        <strong><i class="fa-solid fa-bullseye me-1"></i> Syllabus Objective:</strong>
         <p>{{ exp.objective }}</p>
       </div>
 
       <div class="exp-explanation">
-        <strong>💡 Kaise Kaam Karta Hai & Connection (Hindi):</strong>
+        <strong><i class="fa-solid fa-lightbulb me-1"></i> Working Principle & Architecture:</strong>
         <p>{{ exp.explanationHindi }}</p>
       </div>
 
@@ -74,11 +74,12 @@
 
       <div class="exp-actions-bar">
         <button (click)="toggleSnippet(exp.id)" class="btn-toggle-code">
-          {{ expandedSnippetId === exp.id ? '▲ Hide Code' : '▼ View Code Snippet' }}
+          <i class="fa-solid" [ngClass]="expandedSnippetId === exp.id ? 'fa-chevron-up' : 'fa-code'"></i>
+          {{ expandedSnippetId === exp.id ? ' Hide Code' : ' View Code Snippet' }}
         </button>
 
         <a [routerLink]="exp.route" class="btn-go-feature">
-          Test in Project →
+          Test Live Feature <i class="fa-solid fa-arrow-right ms-1"></i>
         </a>
       </div>
     </div>

@@ -12,6 +12,8 @@ import { AdmissionComponent } from './components/admission/admission.component';
 import { CounterDemoComponent } from './components/counter-demo/counter-demo.component';
 import { AdminComponent } from './components/admin/admin.component';
 import { ExperimentsLabComponent } from './components/experiments-lab/experiments-lab.component';
+import { SyllabusComponent } from './components/syllabus/syllabus.component';
+import { AcademicNoticesComponent } from './components/academic-notices/academic-notices.component';
 import { authGuard } from './guards/auth.guard';
 
 /**
@@ -77,6 +79,12 @@ export const routes: Routes = [
 
   // Master All 30 Experiments Explorer
   { path: 'experiments', component: ExperimentsLabComponent, title: 'All 30 Syllabus Experiments Lab | Student Portal' },
+
+  // [SYLLABUS CURRICULUM HUB]: Units 1 to 5, COs, Books and Progress Checklist
+  { path: 'syllabus', component: SyllabusComponent, title: 'Course Syllabus & Curriculum Hub | Student Portal' },
+
+  // [EXPERIMENTS 16 & 17]: HttpClient REST API & Observables Live Notices
+  { path: 'notices', component: AcademicNoticesComponent, title: 'Live Notices (HttpClient Exp 16 & 17) | Student Portal' },
 
   // Fallback wildcard route
   { path: '**', redirectTo: 'dashboard' }

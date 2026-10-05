@@ -21,10 +21,12 @@
 
     <div class="header-actions">
       <button (click)="openAddModal()" class="btn-primary-action">
-        <span>➕ Add New Student</span>
+        <i class="fa-solid fa-user-plus me-1"></i>
+        <span>Add New Student</span>
       </button>
       <button (click)="resetAllData()" class="btn-ghost-action" title="Reset to initial syllabus dataset">
-        <span>🔄 Reset Data</span>
+        <i class="fa-solid fa-arrows-rotate me-1"></i>
+        <span>Reset Data</span>
       </button>
     </div>
   </div>
@@ -43,7 +45,8 @@
         </span>
       </label>
       <span class="toggle-status" [ngClass]="showList ? 'status-visible' : 'status-hidden'">
-        {{ showList ? '👀 List Visible' : '🙈 List Hidden by *ngIf' }}
+        <i class="fa-solid" [ngClass]="showList ? 'fa-eye' : 'fa-eye-slash'"></i>
+        {{ showList ? 'List Visible' : 'List Hidden by *ngIf' }}
       </span>
     </div>
 
@@ -53,13 +56,13 @@
         (click)="viewMode = 'table'" 
         class="btn-switch" 
         [class.active]="viewMode === 'table'">
-        📄 Table View (Exp 14 ngClass)
+        <i class="fa-solid fa-table-list me-1"></i> Table View (Exp 14)
       </button>
       <button 
         (click)="viewMode = 'grid'" 
         class="btn-switch" 
         [class.active]="viewMode === 'grid'">
-        📇 Card Grid (Exp 7 Reusable)
+        <i class="fa-solid fa-grip me-1"></i> Card Grid (Exp 7)
       </button>
     </div>
   </div>
@@ -67,7 +70,7 @@
   <!-- Filter & Search Bar -->
   <div class="search-filter-bar">
     <div class="search-input-wrap">
-      <span class="search-icon">🔍</span>
+      <i class="fa-solid fa-magnifying-glass search-icon"></i>
       <input 
         type="text" 
         [(ngModel)]="searchTerm" 
@@ -99,7 +102,7 @@
     
     <!-- Empty state -->
     <div *ngIf="filteredStudents.length === 0" class="empty-state-box">
-      <div class="empty-icon">📂</div>
+      <div class="empty-icon"><i class="fa-solid fa-folder-open"></i></div>
       <h3>No students matched your search criteria</h3>
       <p>Try adjusting your search query or course filters, or click "Add New Student".</p>
       <button (click)="searchTerm = ''; selectedCourseFilter = 'ALL'; selectedStatusFilter = 'ALL'" class="btn-reset-filters">
@@ -164,7 +167,8 @@
               <!-- [EXPERIMENT 14]: Status pill with ngClass -->
               <td>
                 <span class="status-tag" [ngClass]="s.marks >= 40 ? 'tag-pass' : 'tag-fail'">
-                  {{ s.marks >= 40 ? '✓ PASS' : '⚠ FAIL' }}
+                  <i class="fa-solid" [ngClass]="s.marks >= 40 ? 'fa-check' : 'fa-triangle-exclamation'"></i>
+                  {{ s.marks >= 40 ? 'PASS' : 'FAIL' }}
                 </span>
               </td>
 
@@ -177,13 +181,13 @@
                 <div class="action-buttons-group">
                   <!-- [EXPERIMENT 19]: Route parameter navigation /student/:id -->
                   <a [routerLink]="['/student', s.id]" class="btn-tbl-action btn-tbl-view" title="View Student Detail">
-                    👁 View
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i> View
                   </a>
                   <button (click)="openEditModal(s)" class="btn-tbl-action btn-tbl-edit" title="Edit Student">
-                    ✏️ Edit
+                    <i class="fa-solid fa-pen-to-square"></i> Edit
                   </button>
                   <button (click)="onDeleteStudent(s.id)" class="btn-tbl-action btn-tbl-del" title="Delete Student">
-                    🗑️ Delete
+                    <i class="fa-solid fa-trash-can"></i> Delete
                   </button>
                 </div>
               </td>
@@ -214,14 +218,14 @@
   <!-- ========================================================================= -->
   <ng-template #hiddenListTemplate>
     <div class="list-hidden-banner">
-      <div class="hidden-icon">🙈</div>
+      <div class="hidden-icon"><i class="fa-solid fa-eye-slash"></i></div>
       <h2>Student List is Currently Hidden!</h2>
       <p class="hidden-text">
         <strong>Experiment 8 Demonstration:</strong> The <code>*ngIf="showList"</code> structural directive 
         completely detached the list from the DOM because the checkbox is unchecked.
       </p>
       <button (click)="showList = true" class="btn-reveal">
-        ✓ Check Box to Show Student List
+        <i class="fa-solid fa-check me-1"></i> Check Box to Show Student List
       </button>
     </div>
   </ng-template>
@@ -232,7 +236,10 @@
   <div *ngIf="isModalOpen" class="modal-backdrop">
     <div class="modal-card">
       <div class="modal-header">
-        <h3>{{ isEditMode ? '✏️ Edit Student Record (Exp 30 CRUD)' : '➕ Add New Student (Exp 30 CRUD)' }}</h3>
+        <h3>
+          <i class="fa-solid" [ngClass]="isEditMode ? 'fa-pen-to-square' : 'fa-user-plus'"></i>
+          {{ isEditMode ? 'Edit Student Record (Exp 30 CRUD)' : 'Add New Student (Exp 30 CRUD)' }}
+        </h3>
         <button (click)="closeModal()" class="btn-close-modal">×</button>
       </div>
 

@@ -38,7 +38,8 @@
     <div class="stat-cell">
       <span class="stat-label">Status</span>
       <span class="status-badge" [ngClass]="student.marks >= 40 ? 'status-pass' : 'status-fail'">
-        {{ student.marks >= 40 ? '✓ PASS' : '✗ FAIL' }}
+        <i class="fa-solid" [ngClass]="student.marks >= 40 ? 'fa-check' : 'fa-xmark'"></i>
+        {{ student.marks >= 40 ? 'PASS' : 'FAIL' }}
       </span>
     </div>
     <div class="stat-cell">
@@ -50,13 +51,16 @@
   <div *ngIf="showActions" class="card-actions">
     <!-- [EXPERIMENT 19]: Dynamic route navigation to /student/:id -->
     <a [routerLink]="['/student', student.id]" class="btn-action btn-view" title="View Full Profile">
-      <span>👁 Details</span>
+      <i class="fa-solid fa-arrow-up-right-from-square"></i>
+      <span>Details</span>
     </a>
     <button (click)="onEditClick()" class="btn-action btn-edit" title="Edit Student">
-      <span>✏️ Edit</span>
+      <i class="fa-solid fa-pen-to-square"></i>
+      <span>Edit</span>
     </button>
     <button (click)="onDeleteClick()" class="btn-action btn-delete" title="Delete Student">
-      <span>🗑️ Delete</span>
+      <i class="fa-solid fa-trash-can"></i>
+      <span>Delete</span>
     </button>
   </div>
 </div>

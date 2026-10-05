@@ -25,38 +25,53 @@ import { RouterModule } from '@angular/router';
 
       <div class="syllabus-units-grid">
         <div class="unit-card">
-          <div class="unit-num">Unit 1</div>
+          <div class="unit-header-row">
+            <div class="unit-num">Unit 1</div>
+            <i class="fa-solid fa-code unit-icon"></i>
+          </div>
           <h3>TypeScript & Angular Fundamentals</h3>
           <p>Classes, Interfaces, Enums, Arrays, and Project Scaffolding via Angular CLI.</p>
-          <span class="coverage-tag">Weightage: 20%</span>
+          <span class="coverage-tag"><i class="fa-solid fa-chart-pie"></i> Weightage: 20%</span>
         </div>
 
         <div class="unit-card">
-          <div class="unit-num">Unit 2</div>
+          <div class="unit-header-row">
+            <div class="unit-num">Unit 2</div>
+            <i class="fa-solid fa-cubes unit-icon"></i>
+          </div>
           <h3>Components, Data Binding & Directives</h3>
           <p>Interpolation, Property & Event Binding, [(ngModel)], Built-in & Custom Pipes and Directives.</p>
-          <span class="coverage-tag">Weightage: 20%</span>
+          <span class="coverage-tag"><i class="fa-solid fa-chart-pie"></i> Weightage: 20%</span>
         </div>
 
         <div class="unit-card">
-          <div class="unit-num">Unit 3</div>
+          <div class="unit-header-row">
+            <div class="unit-num">Unit 3</div>
+            <i class="fa-solid fa-network-wired unit-icon"></i>
+          </div>
           <h3>Services, DI, RxJS & Routing</h3>
           <p>Dependency Injection, HttpClient REST API calls, Observables, Route parameters, and AuthGuards.</p>
-          <span class="coverage-tag">Weightage: 20%</span>
+          <span class="coverage-tag"><i class="fa-solid fa-chart-pie"></i> Weightage: 20%</span>
         </div>
 
         <div class="unit-card">
-          <div class="unit-num">Unit 4</div>
+          <div class="unit-header-row">
+            <div class="unit-num">Unit 4</div>
+            <i class="fa-solid fa-rectangle-list unit-icon"></i>
+          </div>
           <h3>Forms & State Management</h3>
           <p>Template-Driven vs. Reactive Forms, Custom Validators, FormArray, File Upload, and Service state.</p>
-          <span class="coverage-tag">Weightage: 20%</span>
+          <span class="coverage-tag"><i class="fa-solid fa-chart-pie"></i> Weightage: 20%</span>
         </div>
 
         <div class="unit-card">
-          <div class="unit-num">Unit 5</div>
+          <div class="unit-header-row">
+            <div class="unit-num">Unit 5</div>
+            <i class="fa-solid fa-flask-vial unit-icon"></i>
+          </div>
           <h3>Testing, Deployment & Mini Project</h3>
           <p>Jasmine unit tests, Netlify deployment setup, Lazy loading modules, and Full CRUD mini-project.</p>
-          <span class="coverage-tag">Weightage: 20%</span>
+          <span class="coverage-tag"><i class="fa-solid fa-chart-pie"></i> Weightage: 20%</span>
         </div>
       </div>
     </div>
@@ -95,20 +110,51 @@ import { RouterModule } from '@angular/router';
       box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
       display: flex;
       flex-direction: column;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .unit-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
+    }
+    .unit-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.75rem;
     }
     .unit-num {
       background: #4f46e5;
       color: #ffffff;
       font-size: 0.75rem;
       font-weight: 800;
-      padding: 0.2rem 0.6rem;
+      padding: 0.25rem 0.65rem;
       border-radius: 6px;
       width: fit-content;
-      margin-bottom: 0.75rem;
     }
-    .unit-card h3 { margin: 0 0 0.5rem 0; font-size: 1.1rem; color: #0f172a; }
+    .unit-icon {
+      font-size: 1.1rem;
+      color: #818cf8;
+    }
+    .unit-card h3 { margin: 0 0 0.5rem 0; font-size: 1.1rem; color: #0f172a; font-weight: 700; }
     .unit-card p { margin: 0 0 1rem 0; font-size: 0.85rem; color: #64748b; line-height: 1.5; flex: 1; }
-    .coverage-tag { font-size: 0.75rem; color: #16a34a; font-weight: 700; background: #dcfce7; padding: 0.2rem 0.6rem; border-radius: 9999px; width: fit-content; }
+    .coverage-tag {
+      font-size: 0.75rem;
+      color: #16a34a;
+      font-weight: 700;
+      background: #dcfce7;
+      padding: 0.25rem 0.65rem;
+      border-radius: 9999px;
+      width: fit-content;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+    @media (max-width: 768px) {
+      .about-hero { padding: 1.25rem; }
+      .about-hero h1 { font-size: 1.4rem; }
+      .unit-card { padding: 1.25rem; }
+    }
   `]
 })
 export class AboutComponent {}
+

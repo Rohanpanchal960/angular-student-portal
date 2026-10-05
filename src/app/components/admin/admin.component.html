@@ -20,14 +20,14 @@
         <span>Logged in as: <strong>{{ (authService.currentUser$ | async)?.name }}</strong> (Admin Privileges Active)</span>
       </div>
       <button (click)="onLogout()" class="btn-logout">
-        🔒 Logout from Admin
+        <i class="fa-solid fa-right-from-bracket me-1"></i> Logout from Admin
       </button>
     </div>
 
     <!-- Admin controls grid -->
     <div class="admin-tools-grid">
       <div class="tool-card">
-        <h3>🛡️ AuthGuard Protection Status (Exp 20)</h3>
+        <h3><i class="fa-solid fa-shield-halved me-2"></i> AuthGuard Protection Status (Exp 20)</h3>
         <p class="tool-desc">
           Because you are authenticated, Angular's <code>CanActivateFn</code> <code>authGuard</code> allows
           unrestricted navigation to this route.
@@ -36,7 +36,7 @@
       </div>
 
       <div class="tool-card">
-        <h3>👥 Quick Database Management</h3>
+        <h3><i class="fa-solid fa-database me-2"></i> Quick Database Management</h3>
         <p class="tool-desc">
           Total Registered Students: <strong>{{ studentService.getAllStudents().length }}</strong> records in memory & LocalStorage.
         </p>
@@ -46,7 +46,7 @@
       </div>
 
       <div class="tool-card">
-        <h3>⚙️ System Diagnostic</h3>
+        <h3><i class="fa-solid fa-sliders me-2"></i> System Diagnostic</h3>
         <p class="tool-desc">
           Angular Standalone Architecture, Strict TypeScript, RxJS BehaviorSubject Store running smoothly.
         </p>
@@ -59,17 +59,17 @@
   <div *ngIf="!(authService.isLoggedIn$ | async)" class="login-container">
     <div class="login-card">
       <div class="login-header">
-        <span class="lock-icon">🔐</span>
+        <span class="lock-icon"><i class="fa-solid fa-lock"></i></span>
         <h2>Admin Authentication (Exp 22 & 23)</h2>
         <p>Login to bypass the <code>AuthGuard</code> barrier and manage student records.</p>
       </div>
 
       <!-- Alerts -->
       <div *ngIf="loginError" class="login-alert error">
-        ⚠️ {{ loginError }}
+        <i class="fa-solid fa-triangle-exclamation me-1"></i> {{ loginError }}
       </div>
       <div *ngIf="loginSuccess" class="login-alert success">
-        ✓ {{ loginSuccess }}
+        <i class="fa-solid fa-circle-check me-1"></i> {{ loginSuccess }}
       </div>
 
       <!-- [EXPERIMENT 22]: Reactive Form -->
@@ -107,16 +107,20 @@
             <span class="check-title">Experiment 23 Password Strength Criteria:</span>
             <div class="criteria-list">
               <span class="crit-item" [class.passed]="f['password'].value && f['password'].value.length >= 6">
-                {{ (f['password'].value && f['password'].value.length >= 6) ? '✓' : '✗' }} Min 6 characters
+                <i class="fa-solid" [ngClass]="f['password'].value && f['password'].value.length >= 6 ? 'fa-check' : 'fa-xmark'"></i>
+                Min 6 characters
               </span>
               <span class="crit-item" [class.passed]="passwordStrengthErrors?.['hasUpperCase'] !== false && f['password'].value">
-                {{ passwordStrengthErrors?.['hasUpperCase'] !== false && f['password'].value ? '✓' : '✗' }} At least 1 Capital letter (A-Z)
+                <i class="fa-solid" [ngClass]="passwordStrengthErrors?.['hasUpperCase'] !== false && f['password'].value ? 'fa-check' : 'fa-xmark'"></i>
+                At least 1 Capital letter (A-Z)
               </span>
               <span class="crit-item" [class.passed]="passwordStrengthErrors?.['hasNumber'] !== false && f['password'].value">
-                {{ passwordStrengthErrors?.['hasNumber'] !== false && f['password'].value ? '✓' : '✗' }} At least 1 Number (0-9)
+                <i class="fa-solid" [ngClass]="passwordStrengthErrors?.['hasNumber'] !== false && f['password'].value ? 'fa-check' : 'fa-xmark'"></i>
+                At least 1 Number (0-9)
               </span>
               <span class="crit-item" [class.passed]="passwordStrengthErrors?.['hasSpecialChar'] !== false && f['password'].value">
-                {{ passwordStrengthErrors?.['hasSpecialChar'] !== false && f['password'].value ? '✓' : '✗' }} At least 1 Special character (&#64;$!%*?&amp;#)
+                <i class="fa-solid" [ngClass]="passwordStrengthErrors?.['hasSpecialChar'] !== false && f['password'].value ? 'fa-check' : 'fa-xmark'"></i>
+                At least 1 Special character (&#64;$!%*?&amp;#)
               </span>
             </div>
           </div>
@@ -130,7 +134,8 @@
 
         <div class="login-footer">
           <button type="submit" [disabled]="loginForm.invalid" class="btn-login-submit">
-            🔓 Sign In with Reactive Validation
+            <i class="fa-solid fa-right-to-bracket me-2"></i>
+            Sign In with Reactive Validation
           </button>
         </div>
       </form>

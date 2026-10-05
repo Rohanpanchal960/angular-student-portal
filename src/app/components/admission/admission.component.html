@@ -1,8 +1,8 @@
 <div class="admission-page">
   <!-- Toast Alert -->
   <div *ngIf="submissionSuccess" class="success-toast">
-    <span>{{ submissionSuccess }}</span>
-    <button (click)="submissionSuccess = null" class="btn-close-toast">×</button>
+    <span><i class="fa-solid fa-circle-check"></i> {{ submissionSuccess }}</span>
+    <button (click)="submissionSuccess = null" class="btn-close-toast" aria-label="Close notification"><i class="fa-solid fa-xmark"></i></button>
   </div>
 
   <!-- Header -->
@@ -22,13 +22,15 @@
         (click)="formType = 'template'" 
         class="switch-tab-btn" 
         [class.active]="formType === 'template'">
-        📝 Template-Driven Admission Form (Exp 21)
+        <i class="fa-solid fa-file-pen me-2"></i>
+        Template-Driven Form (Exp 21)
       </button>
       <button 
         (click)="formType = 'dynamic'" 
         class="switch-tab-btn" 
         [class.active]="formType === 'dynamic'">
-        ⚡ Dynamic FormArray Subjects Entry (Exp 24)
+        <i class="fa-solid fa-layer-group me-2"></i>
+        Dynamic FormArray Subjects (Exp 24)
       </button>
     </div>
   </div>
@@ -166,7 +168,8 @@
             type="submit" 
             [disabled]="admissionForm.invalid" 
             class="btn-submit-primary">
-            ✓ Submit Admission Application (Exp 21)
+            <i class="fa-solid fa-paper-plane me-2"></i>
+            Submit Admission Application (Exp 21)
           </button>
         </div>
       </form>
@@ -214,7 +217,7 @@
           <div class="formarray-header">
             <h4>Academic Subjects & Marks (FormArray)</h4>
             <button type="button" (click)="addSubject()" class="btn-add-row">
-              ➕ Add Subject (Exp 24)
+              <i class="fa-solid fa-plus me-1"></i> Add Subject (Exp 24)
             </button>
           </div>
 
@@ -249,7 +252,7 @@
                 (click)="removeSubject(i)" 
                 class="btn-remove-sub" 
                 title="Remove Subject">
-                🗑️
+                <i class="fa-solid fa-trash-can"></i>
               </button>
             </div>
           </div>
@@ -266,7 +269,8 @@
             type="submit" 
             [disabled]="dynamicSubjectsForm.invalid" 
             class="btn-submit-primary">
-            ✓ Submit Dynamic Subjects Marksheet (Exp 24)
+            <i class="fa-solid fa-check me-2"></i>
+            Submit Dynamic Subjects Marksheet (Exp 24)
           </button>
         </div>
       </form>

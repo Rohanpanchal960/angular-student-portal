@@ -14,7 +14,7 @@
 
   <!-- Add New Task Card -->
   <div class="add-task-card">
-    <h3>➕ Add New Assignment / Deadline</h3>
+    <h3><i class="fa-solid fa-calendar-plus me-2"></i> Add New Assignment / Deadline</h3>
     <div class="task-form-inline">
       <input 
         type="text" 
@@ -36,11 +36,11 @@
         title="Due date (Pick yesterday to test overdue highlight!)" />
 
       <button (click)="addNewTask()" class="btn-add-task">
-        Add Assignment
+        <i class="fa-solid fa-plus me-1"></i> Add Assignment
       </button>
     </div>
     <span class="hint-date">
-      💡 Tip: Pick a date in the past (before today: {{ todayDateStr }}) to see the custom directive highlight it in red!
+      <i class="fa-solid fa-lightbulb me-1"></i> Tip: Pick a date in the past (before today: {{ todayDateStr }}) to see the custom directive highlight it in red!
     </span>
   </div>
 
@@ -69,22 +69,22 @@
           </span>
           <!-- Overdue Badge -->
           <span *ngIf="isTaskOverdue(task)" class="overdue-warning-badge">
-            ⚠️ OVERDUE DEADLINE (Exp 13)
+            <i class="fa-solid fa-triangle-exclamation me-1"></i> OVERDUE DEADLINE (Exp 13)
           </span>
         </div>
 
         <h3 class="task-title-text">{{ task.title }}</h3>
         
         <div class="task-meta-bottom">
-          <span>📅 Due Date: <strong>{{ task.dueDate | date:'mediumDate' }}</strong></span>
-          <span>👤 Assigned To: <strong>{{ task.assignedTo }}</strong></span>
+          <span><i class="fa-solid fa-calendar-xmark me-1"></i> Due Date: <strong>{{ task.dueDate | date:'mediumDate' }}</strong></span>
+          <span><i class="fa-solid fa-user-check me-1"></i> Assigned To: <strong>{{ task.assignedTo }}</strong></span>
           <span>Status: <strong>{{ task.completed ? 'Submitted' : 'Pending Action' }}</strong></span>
         </div>
       </div>
 
       <div class="task-action-col">
         <button (click)="deleteTask(task.id)" class="btn-del-task" title="Delete Task">
-          🗑️
+          <i class="fa-solid fa-trash-can"></i>
         </button>
       </div>
     </div>

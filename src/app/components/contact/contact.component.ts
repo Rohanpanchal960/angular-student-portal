@@ -24,19 +24,19 @@ import { FormsModule } from '@angular/forms';
         <div class="info-card">
           <h3>Campus Information</h3>
           <div class="info-item">
-            <span>📍 Address:</span>
+            <span><i class="fa-solid fa-location-dot"></i> Address:</span>
             <p>University Campus, Department of Computer Science, Academic Block A, 3rd Floor</p>
           </div>
           <div class="info-item">
-            <span>📧 Email:</span>
+            <span><i class="fa-solid fa-envelope"></i> Email:</span>
             <p>support&#64;university-sms.edu</p>
           </div>
           <div class="info-item">
-            <span>📱 Helpline:</span>
+            <span><i class="fa-solid fa-phone"></i> Helpline:</span>
             <p>+91 (079) 2630-1234 / Ext 402</p>
           </div>
           <div class="info-item">
-            <span>⏰ Office Hours:</span>
+            <span><i class="fa-solid fa-clock"></i> Office Hours:</span>
             <p>Monday - Friday: 9:00 AM - 5:30 PM</p>
           </div>
         </div>
@@ -45,7 +45,7 @@ import { FormsModule } from '@angular/forms';
           <h3>Send an Academic Inquiry</h3>
           <form (ngSubmit)="sendMessage()" class="inquiry-form">
             <div *ngIf="sentMessage" class="alert-success">
-              ✓ {{ sentMessage }}
+              <i class="fa-solid fa-circle-check"></i> {{ sentMessage }}
             </div>
             <div class="form-field">
               <label>Your Name</label>
@@ -59,7 +59,9 @@ import { FormsModule } from '@angular/forms';
               <label>Message / Query</label>
               <textarea [(ngModel)]="msg" name="msg" required rows="3" class="form-input" placeholder="Write your inquiry here..."></textarea>
             </div>
-            <button type="submit" class="btn-send">Send Inquiry Message</button>
+            <button type="submit" class="btn-send">
+              <i class="fa-solid fa-paper-plane"></i> Send Inquiry Message
+            </button>
           </form>
         </div>
       </div>
@@ -93,6 +95,9 @@ import { FormsModule } from '@angular/forms';
     }
     @media (max-width: 768px) {
       .contact-grid { grid-template-columns: 1fr; }
+      .contact-header { padding: 1.25rem; }
+      .contact-header h1 { font-size: 1.4rem; }
+      .info-card, .form-card { padding: 1.25rem !important; }
     }
     .info-card, .form-card {
       background: #ffffff;
@@ -103,7 +108,15 @@ import { FormsModule } from '@angular/forms';
     }
     .info-card h3, .form-card h3 { margin: 0 0 1.25rem 0; font-size: 1.25rem; color: #0f172a; }
     .info-item { margin-bottom: 1rem; }
-    .info-item span { font-weight: 700; font-size: 0.82rem; color: #4f46e5; text-transform: uppercase; }
+    .info-item span {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-weight: 700;
+      font-size: 0.82rem;
+      color: #4f46e5;
+      text-transform: uppercase;
+    }
     .info-item p { margin: 0.2rem 0 0 0; font-size: 0.95rem; color: #334155; }
     .inquiry-form { display: flex; flex-direction: column; gap: 1rem; }
     .form-field { display: flex; flex-direction: column; gap: 0.35rem; }
@@ -118,8 +131,24 @@ import { FormsModule } from '@angular/forms';
       border-radius: 10px;
       font-weight: 700;
       cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: background 0.2s ease;
     }
-    .alert-success { background: #dcfce7; color: #15803d; padding: 0.75rem; border-radius: 8px; font-weight: 600; font-size: 0.85rem; }
+    .btn-send:hover { background: #4338ca; }
+    .alert-success {
+      background: #dcfce7;
+      color: #15803d;
+      padding: 0.75rem;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
   `]
 })
 export class ContactComponent {

@@ -4,115 +4,227 @@
     <div class="navbar-container">
       <!-- Brand Logo -->
       <a routerLink="/dashboard" (click)="closeMobileMenu()" class="navbar-brand">
-        <div class="brand-logo-icon">🎓</div>
+        <div class="brand-logo-icon">
+          <i class="fa-solid fa-graduation-cap"></i>
+        </div>
         <div class="brand-text">
           <span class="brand-title">EduPortal</span>
-          <span class="brand-subtitle">Student Management System</span>
+          <span class="brand-subtitle">Student ERP</span>
         </div>
       </a>
 
-      <!-- Navigation Links -->
-      <nav class="nav-links" [class.mobile-open]="isMobileMenuOpen">
-        <a routerLink="/dashboard" routerLinkActive="active" (click)="closeMobileMenu()" class="nav-link">
-          📊 Dashboard
+      <!-- Desktop Navigation Links (Syllabus removed from header as requested) -->
+      <nav class="nav-links desktop-nav">
+        <a routerLink="/dashboard" routerLinkActive="active" class="nav-link">
+          <i class="fa-solid fa-chart-pie nav-fa-icon"></i> Dashboard
         </a>
-        <a routerLink="/students" routerLinkActive="active" (click)="closeMobileMenu()" class="nav-link">
-          👥 Students (CRUD)
+        <a routerLink="/students" routerLinkActive="active" class="nav-link">
+          <i class="fa-solid fa-users nav-fa-icon"></i> Students
         </a>
-        <a routerLink="/admission" routerLinkActive="active" (click)="closeMobileMenu()" class="nav-link">
-          📝 Admissions
+        <a routerLink="/admission" routerLinkActive="active" class="nav-link">
+          <i class="fa-solid fa-file-signature nav-fa-icon"></i> Admissions
         </a>
-        <a routerLink="/profile" routerLinkActive="active" (click)="closeMobileMenu()" class="nav-link">
-          👤 My Profile
+        <a routerLink="/profile" routerLinkActive="active" class="nav-link">
+          <i class="fa-solid fa-id-card nav-fa-icon"></i> Profile
         </a>
-        <a routerLink="/store" routerLinkActive="active" (click)="closeMobileMenu()" class="nav-link">
-          🛍️ Campus Store
+        <a routerLink="/store" routerLinkActive="active" class="nav-link">
+          <i class="fa-solid fa-store nav-fa-icon"></i> Store
         </a>
-        <a routerLink="/tasks" routerLinkActive="active" (click)="closeMobileMenu()" class="nav-link">
-          ⏰ Tasks
+        <a routerLink="/tasks" routerLinkActive="active" class="nav-link">
+          <i class="fa-solid fa-list-check nav-fa-icon"></i> Tasks
         </a>
-        <a routerLink="/reports" routerLinkActive="active" (click)="closeMobileMenu()" class="nav-link">
-          📈 Reports (Lazy)
+        <a routerLink="/notices" routerLinkActive="active" class="nav-link">
+          <i class="fa-solid fa-bullhorn nav-fa-icon"></i> Notices
         </a>
-        <a routerLink="/admin" routerLinkActive="active" (click)="closeMobileMenu()" class="nav-link nav-admin-link">
-          🔒 Admin Portal
+        <a routerLink="/reports" routerLinkActive="active" class="nav-link">
+          <i class="fa-solid fa-chart-line nav-fa-icon"></i> Reports
+        </a>
+        <a routerLink="/admin" routerLinkActive="active" class="nav-link nav-admin-link">
+          <i class="fa-solid fa-shield-halved nav-fa-icon"></i> Admin
         </a>
       </nav>
 
-      <!-- Right Header Actions -->
+      <!-- Right Header Actions (Always visible, fits on both desktop & mobile) -->
       <div class="navbar-right">
-        <!-- [EXPERIMENT 26]: Shared State Counter Badge displayed live in header -->
-        <a routerLink="/counter" class="header-counter-pill" title="Exp 26: Live shared counter value">
-          <span class="counter-icon">⚡ State:</span>
+        <!-- Live Shared Counter State -->
+        <a routerLink="/counter" class="header-counter-pill" title="Live Shared State (Exp 26 & Signals)">
+          <span class="counter-dot"></span>
+          <span class="counter-label">State:</span>
           <strong class="counter-num">{{ counterService.counter$ | async }}</strong>
         </a>
 
         <!-- Master 30 Experiments Navigator Button -->
-        <a routerLink="/experiments" routerLinkActive="active-lab" class="btn-lab-explorer" title="View all 30 Syllabus Experiments">
-          🧪 <span>Lab Experiments (1-30)</span>
+        <a routerLink="/experiments" routerLinkActive="active-lab" class="btn-lab-explorer" title="All 30 Syllabus Experiments">
+          <i class="fa-solid fa-flask-vial lab-flask-icon"></i>
+          <span class="lab-btn-text">Practicals</span>
         </a>
 
-        <!-- Mobile Menu Toggle Button -->
-        <button (click)="toggleMobileMenu()" class="mobile-toggle-btn" aria-label="Toggle Navigation">
-          <span></span>
-          <span></span>
-          <span></span>
+        <!-- Mobile Menu Toggle Button (Animated burger to X) -->
+        <button 
+          (click)="toggleMobileMenu()" 
+          class="mobile-toggle-btn" 
+          [class.is-active]="isMobileMenuOpen" 
+          aria-label="Toggle Navigation Menu">
+          <span class="burger-bar"></span>
+          <span class="burger-bar"></span>
+          <span class="burger-bar"></span>
         </button>
       </div>
     </div>
   </header>
 
-  <!-- Main Content Area: Routed Views via <router-outlet> (Exp 18) -->
+  <!-- Backdrop Overlay for Mobile Drawer -->
+  <div 
+    class="mobile-backdrop" 
+    [class.is-visible]="isMobileMenuOpen" 
+    (click)="closeMobileMenu()" 
+    aria-hidden="true">
+  </div>
+
+  <!-- Mobile Drawer Menu (Slide-in, complete options) -->
+  <aside class="mobile-drawer" [class.is-open]="isMobileMenuOpen">
+    <div class="drawer-header">
+      <div class="drawer-brand">
+        <span class="drawer-logo">
+          <i class="fa-solid fa-graduation-cap"></i>
+        </span>
+        <div class="drawer-titles">
+          <strong>EduPortal Menu</strong>
+          <span>Navigation Shortcuts</span>
+        </div>
+      </div>
+      <button (click)="closeMobileMenu()" class="btn-drawer-close" aria-label="Close menu">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <div class="drawer-links-list">
+      <a routerLink="/dashboard" routerLinkActive="active" (click)="closeMobileMenu()" class="drawer-link">
+        <span class="d-icon"><i class="fa-solid fa-chart-pie"></i></span>
+        <span>Dashboard Overview</span>
+      </a>
+      <a routerLink="/students" routerLinkActive="active" (click)="closeMobileMenu()" class="drawer-link">
+        <span class="d-icon"><i class="fa-solid fa-users"></i></span>
+        <span>Students Directory (CRUD)</span>
+      </a>
+      <a routerLink="/admission" routerLinkActive="active" (click)="closeMobileMenu()" class="drawer-link">
+        <span class="d-icon"><i class="fa-solid fa-file-signature"></i></span>
+        <span>Admissions & FormArray</span>
+      </a>
+      <a routerLink="/profile" routerLinkActive="active" (click)="closeMobileMenu()" class="drawer-link">
+        <span class="d-icon"><i class="fa-solid fa-id-card"></i></span>
+        <span>My Profile & Photo Upload</span>
+      </a>
+      <a routerLink="/store" routerLinkActive="active" (click)="closeMobileMenu()" class="drawer-link">
+        <span class="d-icon"><i class="fa-solid fa-store"></i></span>
+        <span>Campus Book Store</span>
+      </a>
+      <a routerLink="/tasks" routerLinkActive="active" (click)="closeMobileMenu()" class="drawer-link">
+        <span class="d-icon"><i class="fa-solid fa-list-check"></i></span>
+        <span>Assignments & Overdue Tasks</span>
+      </a>
+      <a routerLink="/notices" routerLinkActive="active" (click)="closeMobileMenu()" class="drawer-link">
+        <span class="d-icon"><i class="fa-solid fa-bullhorn"></i></span>
+        <span>Academic Notices (API)</span>
+      </a>
+      <a routerLink="/reports" routerLinkActive="active" (click)="closeMobileMenu()" class="drawer-link">
+        <span class="d-icon"><i class="fa-solid fa-chart-line"></i></span>
+        <span>Academic Reports (Lazy)</span>
+      </a>
+      <a routerLink="/admin" routerLinkActive="active" (click)="closeMobileMenu()" class="drawer-link drawer-admin">
+        <span class="d-icon"><i class="fa-solid fa-shield-halved"></i></span>
+        <span>Admin Security Portal</span>
+      </a>
+
+      <div class="drawer-divider"></div>
+
+      <a routerLink="/experiments" routerLinkActive="active" (click)="closeMobileMenu()" class="drawer-link drawer-special">
+        <span class="d-icon"><i class="fa-solid fa-flask-vial"></i></span>
+        <span>All 30 Syllabus Experiments</span>
+      </a>
+      <a routerLink="/counter" routerLinkActive="active" (click)="closeMobileMenu()" class="drawer-link drawer-special">
+        <span class="d-icon"><i class="fa-solid fa-bolt"></i></span>
+        <span>Shared State & Signals Demo</span>
+      </a>
+    </div>
+
+    <div class="drawer-footer">
+      <span class="drawer-footer-text">University Angular Framework ERP</span>
+    </div>
+  </aside>
+
+  <!-- Main Content Area: Routed Views via <router-outlet> -->
   <main class="main-content-wrapper">
     <router-outlet></router-outlet>
   </main>
 
-  <!-- Comprehensive Footer -->
+  <!-- Comprehensive Solid Footer -->
   <footer class="app-footer">
     <div class="footer-container">
-      <div class="footer-col">
+      <div class="footer-col brand-col">
         <div class="footer-brand">
-          <span class="footer-logo">🎓</span>
-          <strong>EduPortal SMS</strong>
+          <div class="footer-logo"><i class="fa-solid fa-graduation-cap"></i></div>
+          <div class="footer-brand-text">
+            <strong>EduPortal SMS</strong>
+            <span>Angular Framework Practical ERP</span>
+          </div>
         </div>
         <p class="footer-text">
           Complete practical implementation of the university Angular Framework Syllabus 
-          (Units 1 to 5, Experiments 1 to 30) configured with deployment scripts for Netlify & GitHub Pages.
+          (Units 1 to 5, Experiments 1 to 30) featuring Standalone Components, Reactive Forms, 
+          Signals, RxJS, and dynamic route security.
         </p>
-      </div>
-
-      <div class="footer-col">
-        <h4>Navigation Shortcuts</h4>
-        <ul class="footer-links">
-          <li><a routerLink="/home">Home (Exp 18)</a></li>
-          <li><a routerLink="/about">About Syllabus (Exp 18)</a></li>
-          <li><a routerLink="/contact">Contact Support (Exp 18)</a></li>
-          <li><a routerLink="/students">Students Directory (Exp 30 CRUD)</a></li>
-        </ul>
-      </div>
-
-      <div class="footer-col">
-        <h4>Laboratory Practicals</h4>
-        <ul class="footer-links">
-          <li><a routerLink="/experiments">All 30 Experiments Explorer</a></li>
-          <li><a routerLink="/tasks">Overdue Directive (Exp 13)</a></li>
-          <li><a routerLink="/store">Pipes & Event Binding (Exp 9, 11)</a></li>
-          <li><a routerLink="/reports">Lazy-Loaded Reports (Exp 29)</a></li>
-        </ul>
-      </div>
-
-      <div class="footer-col">
-        <h4>System Deployment</h4>
         <div class="deploy-status-box">
           <span class="status-indicator"></span>
-          <span>Production Build Ready (Exp 28)</span>
+          <span>Cross-Browser & Mobile Verified</span>
         </div>
-        <p class="build-caption">Build command: <code>npm run build</code></p>
+      </div>
+
+      <div class="footer-col">
+        <h4>Curriculum Units (20% Each)</h4>
+        <ul class="footer-links">
+          <li><a routerLink="/syllabus">Unit 1: TypeScript & CLI</a></li>
+          <li><a routerLink="/syllabus">Unit 2: Directives & Pipes</a></li>
+          <li><a routerLink="/syllabus">Unit 3: Services, DI & Routing</a></li>
+          <li><a routerLink="/syllabus">Unit 4: Forms & State (Signals)</a></li>
+          <li><a routerLink="/syllabus">Unit 5: Testing & Deployment</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Core Portal Modules</h4>
+        <ul class="footer-links">
+          <li><a routerLink="/dashboard">Analytics Dashboard (Exp 6)</a></li>
+          <li><a routerLink="/students">Students Directory (Exp 30 CRUD)</a></li>
+          <li><a routerLink="/admission">Dual Admissions (Exp 21 & 24)</a></li>
+          <li><a routerLink="/notices">HttpClient Notices (Exp 16 & 17)</a></li>
+          <li><a routerLink="/counter">Shared State & Signals (Exp 26)</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Practicals & Deployment</h4>
+        <ul class="footer-links">
+          <li><a routerLink="/experiments">All 30 Syllabus Experiments</a></li>
+          <li><a routerLink="/tasks">Overdue Directive (Exp 13)</a></li>
+          <li><a routerLink="/store">Campus Store & Pipes (Exp 9, 11)</a></li>
+          <li><a routerLink="/reports">Lazy-Loaded Reports (Exp 29)</a></li>
+          <li><a routerLink="/admin">Guarded Admin (Exp 20, 22, 23)</a></li>
+        </ul>
       </div>
     </div>
 
     <div class="footer-bottom">
-      <p>© 2025-2026 Student Management System • University Angular Framework Syllabus Lab Work</p>
+      <div class="footer-bottom-inner">
+        <p>© 2025-2026 Student Management System • University Angular Framework Syllabus</p>
+        <div class="tech-stack-badges">
+          <span class="t-badge">Angular 18+</span>
+          <span class="t-badge">TypeScript</span>
+          <span class="t-badge">RxJS</span>
+          <span class="t-badge">Signals</span>
+          <span class="t-badge">Responsive</span>
+        </div>
+      </div>
     </div>
   </footer>
 </div>

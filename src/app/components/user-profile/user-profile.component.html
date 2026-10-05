@@ -18,7 +18,7 @@
       <!-- Section 1: Two-Way Binding Edit Inputs -->
       <div class="panel-card">
         <div class="card-title-row">
-          <h3>✏️ Edit Personal Details (Experiment 10)</h3>
+          <h3><i class="fa-solid fa-user-pen me-2"></i> Edit Personal Details (Experiment 10)</h3>
           <span class="pill-info">[(ngModel)] Live Sync</span>
         </div>
         <p class="section-hint">
@@ -105,7 +105,7 @@
       <!-- Section 2: [EXPERIMENT 25] Template-Driven File Upload Form with Instant Preview -->
       <div class="panel-card upload-card">
         <div class="card-title-row">
-          <h3>📁 Profile Picture Upload (Experiment 25)</h3>
+          <h3><i class="fa-solid fa-cloud-arrow-up me-2"></i> Profile Picture Upload (Experiment 25)</h3>
           <span class="pill-info">Template-Driven + FileReader</span>
         </div>
         <p class="section-hint">
@@ -114,12 +114,12 @@
 
         <!-- Success Toast -->
         <div *ngIf="uploadSuccessMessage" class="upload-alert success">
-          ✓ {{ uploadSuccessMessage }}
+          <i class="fa-solid fa-check me-1"></i> {{ uploadSuccessMessage }}
         </div>
 
         <!-- Error Toast -->
         <div *ngIf="uploadErrorMessage" class="upload-alert error">
-          ⚠ {{ uploadErrorMessage }}
+          <i class="fa-solid fa-triangle-exclamation me-1"></i> {{ uploadErrorMessage }}
         </div>
 
         <!-- Template-driven form with #fileUploadForm="ngForm" -->
@@ -133,7 +133,7 @@
               class="file-input-native" />
             
             <label for="profilePhotoInput" class="drop-zone-label">
-              <span class="upload-icon">📷</span>
+              <i class="fa-solid fa-camera upload-icon"></i>
               <strong class="upload-prompt">Choose an Image File</strong>
               <span class="upload-help">Supports JPG, PNG, WEBP (Max 2MB)</span>
             </label>
@@ -149,7 +149,7 @@
                 <p><strong>Size:</strong> {{ selectedFileSize }}</p>
                 <div class="preview-actions">
                   <button type="submit" class="btn-confirm-upload">
-                    ✓ Save as Profile Picture
+                    <i class="fa-solid fa-check me-1"></i> Save as Profile Picture
                   </button>
                   <button type="button" (click)="cancelPreview()" class="btn-cancel-preview">
                     Cancel
@@ -223,7 +223,7 @@
 
       <!-- Explanatory educational card -->
       <div class="explainer-card">
-        <h4>💡 Connection Note: Experiment 2, 10 & 25</h4>
+        <h4><i class="fa-solid fa-lightbulb me-2"></i> Connection Note: Experiment 2, 10 & 25</h4>
         <ul>
           <li><strong>Interpolation:</strong> Syntax <code>&#123;&#123; user.name &#125;&#125;</code> evaluates the TypeScript property and inserts the string directly into the DOM.</li>
           <li><strong>Two-way Binding:</strong> <code>[(ngModel)]</code> combines property binding <code>[ ]</code> with event binding <code>( )</code> for bidirectional state synchronization.</li>

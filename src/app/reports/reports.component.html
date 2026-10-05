@@ -12,7 +12,7 @@
         </p>
       </div>
       <button (click)="printReport()" class="btn-print">
-        🖨️ Print Official Report
+        <i class="fa-solid fa-print me-1"></i> Print Official Report
       </button>
     </div>
   </div>
@@ -47,33 +47,35 @@
         <span class="student-count-pill">{{ getStudentsByCourse(course).length }} Students Registered</span>
       </div>
 
-      <table class="report-table">
-        <thead>
-          <tr>
-            <th>Roll / ID</th>
-            <th>Student Name</th>
-            <th>Marks (%)</th>
-            <th>Grade</th>
-            <th>Result Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let s of getStudentsByCourse(course)">
-            <td>#{{ s.id }}</td>
-            <td><strong>{{ s.name }}</strong></td>
-            <td>{{ s.marks }}%</td>
-            <td>{{ s.marks >= 75 ? 'Distinction (A+)' : s.marks >= 60 ? 'First Class (A)' : s.marks >= 40 ? 'Pass Class (C)' : 'Fail (F)' }}</td>
-            <td>
-              <span class="result-badge" [class.pass]="s.marks >= 40" [class.fail]="s.marks < 40">
-                {{ s.marks >= 40 ? 'QUALIFIED' : 'FAILED' }}
-              </span>
-            </td>
-          </tr>
-          <tr *ngIf="getStudentsByCourse(course).length === 0">
-            <td colspan="5" class="empty-note">No student enrollments in this course yet.</td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="table-responsive">
+        <table class="report-table">
+          <thead>
+            <tr>
+              <th>Roll / ID</th>
+              <th>Student Name</th>
+              <th>Marks (%)</th>
+              <th>Grade</th>
+              <th>Result Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let s of getStudentsByCourse(course)">
+              <td>#{{ s.id }}</td>
+              <td><strong>{{ s.name }}</strong></td>
+              <td>{{ s.marks }}%</td>
+              <td>{{ s.marks >= 75 ? 'Distinction (A+)' : s.marks >= 60 ? 'First Class (A)' : s.marks >= 40 ? 'Pass Class (C)' : 'Fail (F)' }}</td>
+              <td>
+                <span class="result-badge" [class.pass]="s.marks >= 40" [class.fail]="s.marks < 40">
+                  {{ s.marks >= 40 ? 'QUALIFIED' : 'FAILED' }}
+                </span>
+              </td>
+            </tr>
+            <tr *ngIf="getStudentsByCourse(course).length === 0">
+              <td colspan="5" class="empty-note">No student enrollments in this course yet.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>
