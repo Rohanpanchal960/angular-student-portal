@@ -1,49 +1,58 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterOutlet, RouterModule } from '@angular/router';
-import { CounterService } from './services/counter.service';
-import { AuthService } from './services/auth.service';
+import { RouterOutlet } from '@angular/router';
+import { NavbarComponent } from './shared/components/navbar/navbar.component';
+import { SidebarComponent } from './shared/components/sidebar/sidebar.component';
+import { ToastComponent } from './shared/components/toast/toast.component';
+import { AuthService } from './core/services/auth.service';
+import { FirestoreService } from './core/services/firestore.service';
+import { SeedService } from './core/services/seed.service';
 
 /**
  * ====================================================================================
- * Root Application Component: Student Management System
+ * EDUPORTAL - MASTER APP ROOT COMPONENT
  * ====================================================================================
- * 
- * [KYA KARTA HAI YE CODE?]:
- * Pure application ka shell aur main layout manage karta hai:
- * - Top Navigation bar with active link indicators
- * - Live synchronized state counters (Exp 26)
- * - Dynamic route container `<router-outlet>` (Exp 18)
- * - Mobile responsive navigation menu
- * - Syllabus curriculum footer
+ * Coordinates the master application shell:
+ * - Top Navbar with dark mode toggle and user menu
+ * - Responsive Sidebar Drawer (<860px off-canvas drawer)
+ * - Toast notification overlay
+ * - Dynamic route view `<router-outlet>`
+ * - Automated initial seeding on first application launch
  */
-
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterModule],
+  imports: [
+    CommonModule,
+    RouterOutlet,
+    NavbarComponent,
+    SidebarComponent,
+    ToastComponent
+  ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
-  title = 'Student Management System';
-  isMobileMenuOpen = false;
+export class AppComponent implements OnInit {
+  public auth = inject(AuthService);
+  private firestore = inject(FirestoreService);
+  private seedService = inject(SeedService);
 
-  constructor(
-    public counterService: CounterService,
-    public authService: AuthService
-  ) {}
+  public isSidebarOpen = signal<boolean>(false);
 
-  toggleMobileMenu(): void {
-    this.isMobileMenuOpen = !this.isMobileMenuOpen;
+  async ngOnInit(): Promise<void> {
+    // Automatically seed sample data if no users exist yet
+    const existingUsers = await this.firestore.getAllUsers();
+    if (existingUsers.length === 0) {
+      console.log('ℹ️ [EduPortal] No existing records found. Initializing seed demo data...');
+      await this.seedService.seedAllData();
+    }
   }
 
-  closeMobileMenu(): void {
-    this.isMobileMenuOpen = false;
+  toggleSidebar(): void {
+    this.isSidebarOpen.update(v => !v);
   }
 
-  logout(): void {
-    this.authService.logout();
-    this.closeMobileMenu();
+  closeSidebar(): void {
+    this.isSidebarOpen.set(false);
   }
 }

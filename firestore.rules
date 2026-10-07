@@ -1,0 +1,157 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ============================================================================
+    // HELPER FUNCTIONS & ROLE CHECKERS
+    // ============================================================================
+    
+    // Check if request is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Get current user's profile document data
+    function getUserData() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+
+    // Role predicates
+    function isAdmin() {
+      return isAuthenticated() && getUserData().role == 'admin';
+    }
+
+    function isFaculty() {
+      return isAuthenticated() && getUserData().role == 'faculty' && getUserData().approved == true;
+    }
+
+    function isStudent() {
+      return isAuthenticated() && getUserData().role == 'student';
+    }
+
+    function isOwner(uid) {
+      return isAuthenticated() && request.auth.uid == uid;
+    }
+
+    // ============================================================================
+    // 1. USERS COLLECTION
+    // ============================================================================
+    match /users/{userId} {
+      // Any authenticated user can read public user details (names, designations)
+      allow read: if isAuthenticated();
+
+      // Users can create their own account during registration, BUT cannot assign 'admin' role
+      allow create: if isAuthenticated() &&
+                    request.auth.uid == userId &&
+                    request.resource.data.role in ['student', 'faculty'] &&
+                    (request.resource.data.role == 'student' ? request.resource.data.approved == true : request.resource.data.approved == false);
+
+      // Updating account:
+      // - Admins can update any field (including role and approval)
+      // - Standard users can only update display name/phone, BLOCK privilege escalation on 'role' or 'approved'
+      allow update: if isAdmin() || (
+        isOwner(userId) &&
+        !request.resource.data.diff(resource.data).affectedKeys().hasAny(['role', 'approved', 'uid'])
+      );
+
+      // Only administrators can delete users
+      allow delete: if isAdmin();
+    }
+
+    // ============================================================================
+    // 2. COURSES & SUBJECTS
+    // ============================================================================
+    match /courses/{courseId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+
+    match /subjects/{subjectId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+
+    match /enrollments/{enrollmentId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+
+    // ============================================================================
+    // 3. ATTENDANCE (Doc ID: `${subjectId}_${date}_${studentId}`)
+    // ============================================================================
+    match /attendance/{attendanceId} {
+      // Students can only read their own attendance records
+      // Admin and Faculty can read all attendance
+      allow read: if isAdmin() || isFaculty() || (
+        isStudent() && resource.data.studentId == request.auth.uid
+      );
+
+      // Faculty can mark attendance for subjects assigned to them; Admin has full access
+      allow create, update: if isAdmin() || (
+        isFaculty() && 
+        (
+          get(/databases/$(database)/documents/subjects/$(request.resource.data.subjectId)).data.facultyId == request.auth.uid ||
+          request.resource.data.facultyId == request.auth.uid
+        )
+      );
+
+      allow delete: if isAdmin();
+    }
+
+    // ============================================================================
+    // 4. ASSESSMENTS & MARKS (Doc ID: `${assessmentId}_${studentId}`)
+    // ============================================================================
+    match /assessments/{assessmentId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin() || (isFaculty() && request.resource.data.facultyId == request.auth.uid);
+      allow delete: if isAdmin();
+    }
+
+    match /marks/{markId} {
+      // Students can ONLY read their own marks if 'published' == true
+      // Admin and Faculty can read drafts as well
+      allow read: if isAdmin() || isFaculty() || (
+        isStudent() && 
+        resource.data.studentId == request.auth.uid && 
+        resource.data.published == true
+      );
+
+      // Faculty can create and update marks for their assessments; Admin has full access
+      allow create, update: if isAdmin() || isFaculty();
+      allow delete: if isAdmin();
+    }
+
+    // ============================================================================
+    // 5. EXAM TIMETABLES & SCHEDULES
+    // ============================================================================
+    match /exams/{examId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+
+    // ============================================================================
+    // 6. NOTICES & ANNOUNCEMENTS
+    // ============================================================================
+    match /notices/{noticeId} {
+      allow read: if isAuthenticated();
+      // Admin and approved faculty can post notices
+      allow create: if isAdmin() || isFaculty();
+      allow update, delete: if isAdmin() || (isFaculty() && resource.data.authorId == request.auth.uid);
+    }
+
+    // ============================================================================
+    // 7. SEMESTER RESULTS (Doc ID: `${studentId}_sem${semester}`)
+    // ============================================================================
+    match /results/{resultId} {
+      // Students can read ONLY their own result if published == true
+      allow read: if isAdmin() || (
+        isStudent() && 
+        resource.data.studentId == request.auth.uid && 
+        resource.data.published == true
+      );
+
+      // Only administrators can compile and publish official semester results
+      allow write: if isAdmin();
+    }
+  }
+}
